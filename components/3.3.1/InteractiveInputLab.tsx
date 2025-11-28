@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { InteractiveState } from './types';
-import { Loader2, PenTool, RefreshCw, Eye, EyeOff, Search, HelpCircle, Edit3, Terminal, Sparkles, Mail, Send, Type } from 'lucide-react';
+import { Loader2, PenTool, RefreshCw, Eye, EyeOff, Search, HelpCircle, Edit3, Terminal, Sparkles, Mail, Send, Type, CheckCircle2 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
 interface Props {
@@ -457,14 +457,16 @@ const InteractiveInputLab: React.FC<Props> = ({ config, onComplete }) => {
     if (projectStep === 3) {
         // SUCCESS SPLIT VIEW
         return (
-            <div className="w-full h-full flex items-stretch gap-4 p-2 animate-fade-in">
-                {/* LEFT: FULL CODE */}
-                <div className="flex-1 bg-[#1e293b] rounded-2xl border-4 border-pink-500 overflow-hidden flex flex-col shadow-2xl">
-                    <div className="bg-[#0f172a] p-3 text-pink-300 font-bold font-mono text-sm flex items-center gap-2">
-                        <PenTool size={16}/> Postcard.kt
-                    </div>
-                    <div className="flex-1 p-4 overflow-auto custom-scrollbar">
-                        <pre className="font-mono text-xs text-blue-200 whitespace-pre-wrap leading-relaxed">
+            <div className="w-full h-full relative">
+                {/* Content Container with blur/opacity effect to emphasize the overlay initially */}
+                <div className="w-full h-full flex items-stretch gap-4 p-2 transition-all duration-1000 opacity-40 hover:opacity-100 hover:blur-0 blur-[2px]">
+                    {/* LEFT: FULL CODE */}
+                    <div className="flex-1 bg-[#1e293b] rounded-2xl border-4 border-pink-500 overflow-hidden flex flex-col shadow-2xl">
+                        <div className="bg-[#0f172a] p-3 text-pink-300 font-bold font-mono text-sm flex items-center gap-2">
+                            <PenTool size={16}/> Postcard.kt
+                        </div>
+                        <div className="flex-1 p-4 overflow-auto custom-scrollbar">
+                            <pre className="font-mono text-xs text-blue-200 whitespace-pre-wrap leading-relaxed">
 {`@Composable
 fun PostcardEditor() {
     // 1. State
@@ -490,33 +492,43 @@ fun PostcardEditor() {
         )
     }
 }`}
-                        </pre>
+                            </pre>
+                        </div>
+                    </div>
+
+                    {/* RIGHT: PREVIEW */}
+                    <div className="w-[300px] bg-[#FFF8E1] rounded-xl border-8 border-slate-300 shadow-2xl overflow-hidden flex flex-col relative p-6 font-serif">
+                        <div className="absolute top-4 right-4 w-16 h-20 border-2 border-slate-300 flex items-center justify-center text-slate-300 text-xs">
+                            STAMP
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-800 mb-8 underline decoration-pink-300">Postcard</h3>
+                        
+                        <div className="mb-4">
+                            <span className="text-xs text-slate-500 uppercase font-bold">To:</span>
+                            <div className="text-lg font-cursive text-slate-800 border-b border-slate-300">
+                                {projectInputs[1].split('=').pop()?.replace(/[^\w\s]/gi, 'Chiaki') || "Chiaki"}
+                            </div>
+                        </div>
+
+                        <div className="flex-1">
+                            <span className="text-xs text-slate-500 uppercase font-bold">Message:</span>
+                            <div className="text-base text-slate-700 leading-relaxed mt-2 font-cursive">
+                                Looking forward to the camping trip! The view here is amazing.
+                            </div>
+                        </div>
+                        
+                        <div className="text-right text-sm text-pink-600 font-bold mt-4">
+                            - Nadeshiko
+                        </div>
                     </div>
                 </div>
 
-                {/* RIGHT: PREVIEW */}
-                <div className="w-[300px] bg-[#FFF8E1] rounded-xl border-8 border-slate-300 shadow-2xl overflow-hidden flex flex-col relative p-6 font-serif">
-                    <div className="absolute top-4 right-4 w-16 h-20 border-2 border-slate-300 flex items-center justify-center text-slate-300 text-xs">
-                        STAMP
-                    </div>
-                    <h3 className="text-xl font-bold text-slate-800 mb-8 underline decoration-pink-300">Postcard</h3>
-                    
-                    <div className="mb-4">
-                        <span className="text-xs text-slate-500 uppercase font-bold">To:</span>
-                        <div className="text-lg font-cursive text-slate-800 border-b border-slate-300">
-                            {projectInputs[1].split('=').pop()?.replace(/[^\w\s]/gi, 'Chiaki') || "Chiaki"}
-                        </div>
-                    </div>
-
-                    <div className="flex-1">
-                        <span className="text-xs text-slate-500 uppercase font-bold">Message:</span>
-                        <div className="text-base text-slate-700 leading-relaxed mt-2 font-cursive">
-                            Looking forward to the camping trip! The view here is amazing.
-                        </div>
-                    </div>
-                    
-                    <div className="text-right text-sm text-pink-600 font-bold mt-4">
-                        - Nadeshiko
+                {/* OVERLAY INDICATOR */}
+                <div className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none">
+                    <div className="bg-white/95 border-4 border-pink-400 text-pink-600 px-8 py-6 rounded-3xl shadow-2xl animate-bounce flex flex-col items-center gap-2 text-center transform scale-110 pointer-events-auto">
+                        <CheckCircle2 size={48} className="text-green-500 mb-2" />
+                        <span className="text-2xl font-black tracking-tight">代码构建完成！</span>
+                        <span className="text-sm font-bold text-slate-500">请点击右下角的“下一步”继续剧情 👉</span>
                     </div>
                 </div>
             </div>
