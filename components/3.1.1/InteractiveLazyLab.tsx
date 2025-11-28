@@ -69,8 +69,15 @@ const InteractiveLazyLab: React.FC<Props> = ({ config, onComplete }) => {
   const handleQuiz = (choice: 'CONTENT' | 'MODIFIER') => {
       setQuizChoice(choice);
       if (choice === 'CONTENT') {
-          setTimeout(onComplete, 1500);
+          setTimeout(onComplete, 2500);
       }
+  };
+
+  const getQuizFeedback = () => {
+      if (!quizChoice) return null;
+      if (quizChoice === 'CONTENT') return { correct: true, text: "正确！contentPadding 会在容器内部添加内边距，允许内容滚动到边缘，不会被裁切。" };
+      if (quizChoice === 'MODIFIER') return { correct: false, text: "错误。Modifier.padding 会导致滚动区域变小，内容滑到边缘时会被生硬地“切断”。" };
+      return null;
   };
 
   // --- TYPING ---
@@ -178,6 +185,9 @@ const InteractiveLazyLab: React.FC<Props> = ({ config, onComplete }) => {
   }
 
   if (mode === 'PADDING_QUIZ') {
+      const feedback = getQuizFeedback();
+      const isSolved = quizChoice === 'CONTENT';
+
       return (
           <div className="w-full h-full flex flex-col items-center justify-center gap-6 p-4">
               <div className="bg-white/80 px-6 py-2 rounded-full font-bold text-amber-900 border border-amber-200 shadow-sm">
@@ -185,7 +195,7 @@ const InteractiveLazyLab: React.FC<Props> = ({ config, onComplete }) => {
               </div>
               <div className="flex gap-8">
                   {/* Option A: Modifier */}
-                  <button onClick={() => handleQuiz('MODIFIER')} className={`group relative w-64 bg-slate-100 rounded-[2rem] border-8 border-slate-800 overflow-hidden shadow-xl transition-all ${quizChoice === 'MODIFIER' ? 'ring-4 ring-red-500 scale-95' : 'hover:scale-105'}`}>
+                  <button disabled={isSolved} onClick={() => handleQuiz('MODIFIER')} className={`group relative w-64 bg-slate-100 rounded-[2rem] border-8 border-slate-800 overflow-hidden shadow-xl transition-all ${quizChoice === 'MODIFIER' ? 'ring-4 ring-red-500 scale-95' : 'hover:scale-105'}`}>
                       <div className="absolute top-0 left-0 right-0 h-6 bg-slate-800 z-20 flex justify-center"><div className="w-20 h-4 bg-black rounded-b-xl"></div></div>
                       <div className="pt-8 px-4 h-full bg-white flex flex-col gap-2">
                           <div className="text-center text-xs text-red-500 font-bold mb-1">Modifier.padding()</div>
@@ -200,7 +210,7 @@ const InteractiveLazyLab: React.FC<Props> = ({ config, onComplete }) => {
                   </button>
 
                   {/* Option B: ContentPadding */}
-                  <button onClick={() => handleQuiz('CONTENT')} className={`group relative w-64 bg-slate-100 rounded-[2rem] border-8 border-slate-800 overflow-hidden shadow-xl transition-all ${quizChoice === 'CONTENT' ? 'ring-4 ring-green-500 scale-95' : 'hover:scale-105'}`}>
+                  <button disabled={isSolved} onClick={() => handleQuiz('CONTENT')} className={`group relative w-64 bg-slate-100 rounded-[2rem] border-8 border-slate-800 overflow-hidden shadow-xl transition-all ${quizChoice === 'CONTENT' ? 'ring-4 ring-green-500 scale-95' : 'hover:scale-105'}`}>
                       <div className="absolute top-0 left-0 right-0 h-6 bg-slate-800 z-20 flex justify-center"><div className="w-20 h-4 bg-black rounded-b-xl"></div></div>
                       <div className="pt-8 h-full bg-white flex flex-col">
                           <div className="text-center text-xs text-green-500 font-bold mb-1">contentPadding</div>
@@ -213,6 +223,13 @@ const InteractiveLazyLab: React.FC<Props> = ({ config, onComplete }) => {
                        {quizChoice === 'CONTENT' && <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center text-green-600 font-black text-4xl">✓</div>}
                   </button>
               </div>
+              {feedback && (
+                  <div className={`mt-4 p-4 rounded-xl text-sm font-bold text-center max-w-lg animate-fade-in
+                      ${feedback.correct ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'}
+                  `}>
+                      {feedback.text}
+                  </div>
+              )}
           </div>
       )
   }

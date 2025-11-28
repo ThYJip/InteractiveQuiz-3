@@ -111,7 +111,17 @@ const InteractiveListLab: React.FC<Props> = ({ config, onComplete }) => {
   const handleQuiz = (choice: string) => {
       setQuizChoice(choice);
       if (choice === 'POSITION') {
-          setTimeout(onComplete, 1500);
+          setTimeout(onComplete, 2500);
+      }
+  };
+
+  const getQuizFeedback = () => {
+      if (!quizChoice) return null;
+      switch (quizChoice) {
+          case 'DATA_ID': return { correct: false, text: "错误。Compose 无法自动猜测哪个字段是 ID，你必须显式指定它。" };
+          case 'RANDOM': return { correct: false, text: "错误。如果使用随机数，每次重组都会被视为全新的 Item，导致全部重新渲染，状态丢失且性能极差。" };
+          case 'POSITION': return { correct: true, text: "正确！默认使用 Item 在列表中的位置索引。如果插入或删除，位置发生变化，状态就会错位。" };
+          default: return null;
       }
   };
 
@@ -457,6 +467,9 @@ fun ChatList(messages: List<Message>) {
   }
 
   if (mode === 'QUIZ') {
+      const feedback = getQuizFeedback();
+      const isSolved = quizChoice === 'POSITION';
+
       return (
         <div className="w-full h-full flex flex-col items-center justify-center p-4">
             <div className="bg-white/90 p-8 rounded-3xl shadow-xl border-4 border-indigo-100 max-w-lg w-full">
@@ -481,14 +494,18 @@ fun ChatList(messages: List<Message>) {
                         }
 
                         return (
-                            <button key={val} onClick={() => handleQuiz(val)} className={btnClass} disabled={!!quizChoice}>
+                            <button key={val} onClick={() => handleQuiz(val)} className={btnClass} disabled={isSolved}>
                                 {opt}
                             </button>
                         )
                     })}
                 </div>
-                {quizChoice === 'POSITION' && (
-                    <div className="mt-4 text-green-600 font-bold animate-bounce text-center">✅ 正确！这就是为什么删除会导致状态错位。</div>
+                {feedback && (
+                    <div className={`mt-6 p-4 rounded-xl text-sm font-bold text-center animate-fade-in
+                        ${feedback.correct ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'}
+                    `}>
+                        {feedback.text}
+                    </div>
                 )}
             </div>
         </div>

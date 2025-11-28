@@ -19,7 +19,7 @@ const InteractiveConfigLab: React.FC<Props> = ({ config, onComplete }) => {
   const [hasRotatedOnce, setHasRotatedOnce] = useState(false);
 
   // === LAB 2: QUIZ STATE ===
-  const [quizAnswer, setQuizAnswer] = useState<string | null>(null);
+  const [quizChoice, setQuizChoice] = useState<string | null>(null);
 
   // === LAB 3: GUIDED TYPING STATE ===
   const [typedCode, setTypedCode] = useState("");
@@ -50,9 +50,19 @@ const InteractiveConfigLab: React.FC<Props> = ({ config, onComplete }) => {
 
   // --- LOGIC: QUIZ ---
   const handleQuizAnswer = (answer: string) => {
-      setQuizAnswer(answer);
+      setQuizChoice(answer);
       if (answer === 'Socket') {
-          setTimeout(onComplete, 1500);
+          setTimeout(onComplete, 2500);
+      }
+  };
+
+  const getQuizFeedback = (choice: string | null) => {
+      if (!choice) return null;
+      switch (choice) {
+          case 'Int': return { correct: false, text: "错误。Int 是基本数据类型，Bundle 完全支持存储整数。" };
+          case 'String': return { correct: false, text: "错误。String 是最常用的数据类型，Bundle 支持得很好。" };
+          case 'Socket': return { correct: true, text: "正确！Socket 是网络连接句柄，属于系统级资源，无法被序列化写入 Bundle，强行存储会导致 Crash。" };
+          default: return null;
       }
   };
 
@@ -218,6 +228,7 @@ const InteractiveConfigLab: React.FC<Props> = ({ config, onComplete }) => {
 
   // 3. QUIZ
   if (mode === 'QUIZ') {
+    const feedback = getQuizFeedback(quizChoice);
     return (
         <div className="w-full h-full flex flex-col items-center justify-center p-4">
             <div className="bg-white/90 p-8 rounded-3xl shadow-xl border-4 border-green-100 max-w-lg w-full">
@@ -231,8 +242,10 @@ const InteractiveConfigLab: React.FC<Props> = ({ config, onComplete }) => {
                 <div className="space-y-3">
                     {['Int (整数)', 'String (字符串)', 'Socket (网络连接)'].map((opt) => {
                         const val = opt.split(' ')[0];
-                        const isSelected = quizAnswer === val;
+                        const isSelected = quizChoice === val;
                         const isCorrect = val === 'Socket';
+                        // Disable buttons only if user has already found the correct answer
+                        const isSolved = quizChoice === 'Socket';
                         
                         let btnClass = "w-full p-4 rounded-xl border-2 text-left font-bold transition-all ";
                         if (isSelected) {
@@ -242,17 +255,18 @@ const InteractiveConfigLab: React.FC<Props> = ({ config, onComplete }) => {
                         }
 
                         return (
-                            <button key={val} onClick={() => handleQuizAnswer(val)} className={btnClass} disabled={!!quizAnswer}>
+                            <button key={val} onClick={() => handleQuizAnswer(val)} className={btnClass} disabled={isSolved}>
                                 {opt}
                             </button>
                         )
                     })}
                 </div>
-                {quizAnswer === 'Socket' && (
-                    <div className="mt-4 text-green-600 font-bold animate-bounce text-center">✅ 回答正确！</div>
-                )}
-                {quizAnswer && quizAnswer !== 'Socket' && (
-                    <div className="mt-4 text-red-500 font-bold text-center">❌ 哎呀，Bundle 可以存基本类型的。再想想？</div>
+                {feedback && (
+                    <div className={`mt-6 p-4 rounded-xl text-sm font-bold text-center animate-fade-in
+                        ${feedback.correct ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'}
+                    `}>
+                        {feedback.text}
+                    </div>
                 )}
             </div>
         </div>

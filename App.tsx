@@ -5,9 +5,10 @@ import GameEngineRemember from './components/2.3.1/GameEngine';
 import GameEngineConfig from './components/2.3.2/GameEngine';
 import GameEngineLazy from './components/3.1.1/GameEngine';
 import GameEngineHetero from './components/3.1.2/GameEngine';
+import GameEngineScroll from './components/3.1.3/GameEngine';
 import Lobby from './components/Lobby';
 
-type View = 'LOBBY' | '4.1.2' | '2.4.2' | '2.3.1' | '2.3.2' | '3.1.1' | '3.1.2';
+type View = 'LOBBY' | '4.1.2' | '2.4.2' | '2.3.1' | '2.3.2' | '3.1.1' | '3.1.2' | '3.1.3';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('LOBBY');
@@ -48,6 +49,12 @@ const App: React.FC = () => {
         return (
           <div className="w-full h-screen relative overflow-hidden bg-[#EEF2FF] text-slate-800 selection:bg-indigo-300 selection:text-white">
             <GameEngineHetero onBack={() => setCurrentView('LOBBY')} />
+          </div>
+        );
+      case '3.1.3':
+        return (
+          <div className="w-full h-screen relative overflow-hidden bg-[#E0F2F1] text-slate-800 selection:bg-teal-300 selection:text-white">
+            <GameEngineScroll onBack={() => setCurrentView('LOBBY')} />
           </div>
         );
       default:
