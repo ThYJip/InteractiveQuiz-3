@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Speaker } from './types';
-import { Tent, User, ArrowRight, Ghost, Glasses } from 'lucide-react';
+import { Tent, User, ArrowRight, Ghost, Glasses, Home } from 'lucide-react';
 
 interface Props {
   speaker: Speaker;
   text: string;
   onNext: () => void;
   canProceed: boolean;
+  isLastStep?: boolean;
+  onHome?: () => void;
 }
 
-const DialogLayer: React.FC<Props> = ({ speaker, text, onNext, canProceed }) => {
+const DialogLayer: React.FC<Props> = ({ speaker, text, onNext, canProceed, isLastStep, onHome }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isTyping, setIsTyping] = useState(true);
 
@@ -82,22 +84,38 @@ const DialogLayer: React.FC<Props> = ({ speaker, text, onNext, canProceed }) => 
         <div className="absolute bottom-4 right-4 w-6 h-6 border-b-4 border-r-4 border-teal-300 rounded-br-xl opacity-60" />
 
         {/* Content */}
-        <div className="mt-2">
+        <div className="mt-2 pr-24">
             <p className="text-slate-700 text-lg md:text-xl leading-relaxed font-bold tracking-wide">
             {displayedText}
             {isTyping && <span className="inline-block w-2 h-5 bg-teal-400 ml-1 animate-pulse align-middle rounded-full"></span>}
             </p>
         </div>
 
-        {/* Next Indicator */}
-        {canProceed && !isTyping && (
-            <button 
-                onClick={onNext}
-                className="absolute bottom-4 right-8 text-teal-500 animate-bounce flex items-center gap-1 hover:text-teal-700 transition-colors"
-            >
-               <span className="text-sm font-bold uppercase tracking-widest">Next</span>
-               <ArrowRight size={20} />
-            </button>
+        {/* Action Buttons */}
+        {!isTyping && (
+            <>
+                {/* Next Button */}
+                {!isLastStep && canProceed && (
+                    <button 
+                        onClick={onNext}
+                        className="absolute bottom-6 right-8 text-teal-500 animate-bounce flex items-center gap-1 hover:text-teal-700 transition-colors"
+                    >
+                    <span className="text-sm font-bold uppercase tracking-widest">Next</span>
+                    <ArrowRight size={20} />
+                    </button>
+                )}
+
+                {/* Return Home Button (Only on Last Step) */}
+                {isLastStep && onHome && (
+                     <button 
+                        onClick={onHome}
+                        className="absolute bottom-6 right-8 bg-teal-100 hover:bg-teal-200 text-teal-700 px-5 py-2 rounded-xl font-bold flex items-center gap-2 shadow-sm transition-all animate-pulse"
+                    >
+                        <Home size={18} />
+                        <span>返回大厅</span>
+                    </button>
+                )}
+            </>
         )}
       </div>
     </div>

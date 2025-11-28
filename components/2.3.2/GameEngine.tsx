@@ -60,7 +60,9 @@ const GameEngine: React.FC<Props> = ({ onBack }) => {
         speaker={currentStep.speaker} 
         text={currentStep.text} 
         onNext={handleNext} 
-        canProceed={canProceed && !(isLastStep && currentStep.viewType === 'VICTORY')} 
+        canProceed={canProceed}
+        isLastStep={isLastStep}
+        onHome={onBack}
       />
       
       {/* Background Decor */}

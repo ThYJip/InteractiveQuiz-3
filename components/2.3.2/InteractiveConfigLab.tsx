@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { InteractiveState } from './types';
-import { Smartphone, RefreshCw, Archive, AlertTriangle, CheckCircle2, Plus } from 'lucide-react';
+import { Smartphone, RefreshCw, Archive, AlertTriangle, CheckCircle2, Plus, HelpCircle } from 'lucide-react';
 
 interface Props {
   config: InteractiveState;
@@ -34,15 +34,11 @@ const InteractiveConfigLab: React.FC<Props> = ({ config, onComplete }) => {
         // Check for success condition
         if (count > 0) { // Only finish if we actually had some pinecones to test with
              if (isProblemMode) {
-                 // In problem mode, we succeed if we see the data LOSS (user understands the bug)
-                 // But typically we want them to TRY to rotate.
-                 // Let's just complete after one rotation for simplicity in narrative flow
                  setCompleted(true);
-                 setTimeout(onComplete, 2000);
+                 setTimeout(onComplete, 2500); // Give user time to read the failure message
              } else {
-                 // In fix mode, we succeed if data is PRESERVED
                  setCompleted(true);
-                 setTimeout(onComplete, 2000);
+                 setTimeout(onComplete, 2500);
              }
         }
     }, 800);
@@ -125,47 +121,71 @@ const InteractiveConfigLab: React.FC<Props> = ({ config, onComplete }) => {
        </div>
 
        {/* System Log / Feedback */}
-       <div className={`w-full max-w-xl rounded-2xl border-l-8 p-5 shadow-md flex gap-4 transition-all shrink-0
+       <div className={`w-full max-w-xl rounded-2xl border-l-8 p-5 shadow-md flex flex-col gap-4 transition-all shrink-0
            ${activityStatus === 'RECREATED' 
                 ? (isProblemMode && count === 0 ? 'bg-red-50 border-red-400' : 'bg-green-50 border-green-500')
                 : 'bg-white border-slate-200'
            }
        `}>
-           <div className="shrink-0 pt-1">
-               {activityStatus === 'RECREATED' 
-                  ? (isProblemMode && count === 0 ? <AlertTriangle className="text-red-400" /> : <CheckCircle2 className="text-green-600" />)
-                  : <Smartphone className="text-slate-400" />
-               }
+           <div className="flex gap-4">
+               <div className="shrink-0 pt-1">
+                   {activityStatus === 'RECREATED' 
+                      ? (isProblemMode && count === 0 ? <AlertTriangle className="text-red-400" /> : <CheckCircle2 className="text-green-600" />)
+                      : <Smartphone className="text-slate-400" />
+                   }
+               </div>
+               
+               <div className="flex-1">
+                   <h4 className="font-bold text-slate-800 mb-1">
+                       System Status: {activityStatus}
+                   </h4>
+                   
+                   {activityStatus === 'RECREATED' && (
+                       <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+                           <p className={`text-sm mb-2 font-medium ${isProblemMode && count === 0 ? 'text-red-600' : 'text-green-600'}`}>
+                               {isProblemMode && count === 0 
+                                    ? "Activity 重建！内存中的 `remember` 丢失！Count 归零。"
+                                    : "Activity 重建！从 `SavedStateHandle` 恢复数据！Count 保持不变。"
+                               }
+                           </p>
+                           {!isProblemMode && (
+                               <div className="flex items-center gap-2 text-xs bg-green-100 text-green-800 px-3 py-2 rounded-lg border border-green-200">
+                                   <Archive size={14} />
+                                   <span>Bundle Restored: {`{ "count": ${count} }`}</span>
+                               </div>
+                           )}
+                       </div>
+                   )}
+
+                   {activityStatus === 'ALIVE' && (
+                       <p className="text-slate-500 text-sm">
+                           Activity 运行正常。数据暂时存储在 RAM 中。
+                       </p>
+                   )}
+               </div>
            </div>
            
-           <div className="flex-1">
-               <h4 className="font-bold text-slate-800 mb-1">
-                   System Status: {activityStatus}
-               </h4>
-               
-               {activityStatus === 'RECREATED' && (
-                   <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-                       <p className={`text-sm mb-2 font-medium ${isProblemMode && count === 0 ? 'text-red-600' : 'text-green-600'}`}>
-                           {isProblemMode && count === 0 
-                                ? "Activity 重建！内存中的 `remember` 丢失！Count 归零。"
-                                : "Activity 重建！从 `SavedStateHandle` 恢复数据！Count 保持不变。"
-                           }
-                       </p>
-                       {!isProblemMode && (
-                           <div className="flex items-center gap-2 text-xs bg-green-100 text-green-800 px-3 py-2 rounded-lg border border-green-200">
-                               <Archive size={14} />
-                               <span>Bundle Restored: {`{ "count": ${count} }`}</span>
-                           </div>
-                       )}
-                   </div>
-               )}
-
-               {activityStatus === 'ALIVE' && (
-                   <p className="text-slate-500 text-sm">
-                       Activity 运行正常。数据暂时存储在 RAM 中。
-                   </p>
-               )}
-           </div>
+           {/* BEGINNER EXPLANATION CARD */}
+           {activityStatus === 'RECREATED' && (
+                <div className="mt-1 bg-white/60 p-3 rounded-xl border border-slate-200/50 text-xs md:text-sm text-slate-700 leading-relaxed animate-in fade-in duration-700">
+                    <h5 className="font-bold flex items-center gap-1 mb-1 text-slate-800">
+                        <HelpCircle size={14} className="text-teal-600"/> 
+                        🔰 它是怎么工作的？
+                    </h5>
+                    {isProblemMode ? (
+                        <span>
+                            想象 <code>remember</code> 就像<b>金鱼的记忆</b> 🐟。数据存在运行内存 (RAM) 里。
+                            当屏幕旋转时，旧的“手机”(Activity) 被系统销毁（就像断电一样），内存被清空，所以数据就丢了。
+                        </span>
+                    ) : (
+                        <span>
+                            想象 <code>rememberSaveable</code> 就像一个<b>坚固的保险箱</b> 🔐。
+                            它会自动把数据打包存进系统的硬盘 (Bundle) 里。
+                            即使旧的“手机”被销毁，新创建的“手机”会立刻收到这个保险箱，数据完好无损！
+                        </span>
+                    )}
+                </div>
+           )}
        </div>
 
     </div>
