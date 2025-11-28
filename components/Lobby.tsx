@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layers, Share2, Sparkles, Zap, BrainCircuit } from 'lucide-react';
+import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, RefreshCw } from 'lucide-react';
 
 interface Props {
   onSelectLesson: (lessonId: string) => void;
@@ -95,6 +95,32 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
             <div className="flex items-center gap-2 text-green-600 font-bold text-sm">
               <Layers size={16} />
               <span>Compose 核心 (Cozy Forest)</span>
+            </div>
+          </div>
+        </button>
+
+        {/* Card 4: Config Changes (Wind Theme Mapping) */}
+        <button 
+          onClick={() => onSelectLesson('2.3.2')}
+          className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-teal-100 hover:border-teal-300 overflow-hidden"
+        >
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-teal-100 rounded-full blur-2xl group-hover:bg-teal-200 transition-colors opacity-60"></div>
+          
+          <div className="relative z-10">
+            <div className="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center mb-6 text-teal-600 group-hover:scale-110 transition-transform duration-500">
+              <RefreshCw size={32} strokeWidth={2.5} />
+            </div>
+            
+            <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-teal-700 transition-colors">
+              2.3.2 配置变更
+            </h2>
+            <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+              露营地刮起了大风（屏幕旋转）！如何使用 Saveable 保存重要数据？
+            </p>
+            
+            <div className="flex items-center gap-2 text-teal-600 font-bold text-sm">
+              <Smartphone size={16} />
+              <span>生命周期 (Cozy Wind)</span>
             </div>
           </div>
         </button>

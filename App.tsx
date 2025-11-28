@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import GameEngineScope from './components/4.1.2/GameEngine';
 import GameEngineHoisting from './components/2.4.2/GameEngine';
 import GameEngineRemember from './components/2.3.1/GameEngine';
+import GameEngineConfig from './components/2.3.2/GameEngine';
 import Lobby from './components/Lobby';
 
-type View = 'LOBBY' | '4.1.2' | '2.4.2' | '2.3.1';
+type View = 'LOBBY' | '4.1.2' | '2.4.2' | '2.3.1' | '2.3.2';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('LOBBY');
@@ -27,6 +28,12 @@ const App: React.FC = () => {
         return (
           <div className="w-full h-screen relative overflow-hidden bg-[#F1F8E9] text-slate-800 selection:bg-green-300 selection:text-white">
             <GameEngineRemember onBack={() => setCurrentView('LOBBY')} />
+          </div>
+        );
+      case '2.3.2':
+        return (
+          <div className="w-full h-screen relative overflow-hidden bg-[#E0F2F1] text-slate-800 selection:bg-teal-300 selection:text-white">
+            <GameEngineConfig onBack={() => setCurrentView('LOBBY')} />
           </div>
         );
       default:
