@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { script } from './script';
 import StageLayer from './StageLayer';
@@ -34,12 +35,12 @@ const GameEngine: React.FC<Props> = ({ onBack }) => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col relative bg-[#E0F2F1]">
-      {/* Back Button (Teal Wind Style) */}
+    <div className="w-full h-full flex flex-col relative bg-[#F1F8E9]">
+      {/* Back Button (Green Style) */}
       {onBack && (
         <button 
           onClick={onBack}
-          className="fixed top-6 left-6 z-50 flex items-center gap-2 px-5 py-2.5 bg-white/90 hover:bg-teal-50 border-2 border-teal-200 hover:border-teal-300 rounded-2xl text-teal-800/80 hover:text-teal-700 transition-all shadow-sm hover:shadow-md group"
+          className="fixed top-6 left-6 z-50 flex items-center gap-2 px-5 py-2.5 bg-white/90 hover:bg-green-50 border-2 border-green-200 hover:border-green-300 rounded-2xl text-green-800/80 hover:text-green-700 transition-all shadow-sm hover:shadow-md group"
         >
           <Home size={18} className="group-hover:-translate-x-1 transition-transform" />
           <span className="text-sm font-bold tracking-wide">返回大厅</span>
@@ -67,8 +68,8 @@ const GameEngine: React.FC<Props> = ({ onBack }) => {
       
       {/* Background Decor */}
       <div className="absolute top-8 right-8 text-right opacity-20 pointer-events-none select-none">
-          <h2 className="text-4xl font-black text-teal-900/60">CHAPTER 2.3</h2>
-          <span className="font-mono text-teal-800/60 tracking-widest">SAVABLE STATE</span>
+          <h2 className="text-4xl font-black text-green-900/60">CHAPTER 2.3.2</h2>
+          <span className="font-mono text-green-800/60 tracking-widest">REMEMBER SAVEABLE</span>
       </div>
     </div>
   );

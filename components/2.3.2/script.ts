@@ -4,96 +4,89 @@ import { ScriptStep } from './types';
 export const script: ScriptStep[] = [
   {
     id: 1,
-    speaker: "Rin",
-    text: "欢迎来到“风之谷”。在 Android 的世界里，有一种可怕的自然现象叫“配置变更”(Configuration Change)。",
+    speaker: "Nadeshiko",
+    text: "哇！篮子里装满了松果！这可是战利品。我要拍一张照片发给千明她们看！",
     viewType: "IMAGE",
     viewContent: {
-      imagePrompt: "凛站在峡谷风口，风吹得她的围巾飞舞。背景是荒凉的峡谷。"
+      imagePrompt: "抚子举着满满一篮子松果，拿出手机准备拍照。背景是美丽的秋季森林。"
     }
   },
   {
     id: 2,
     speaker: "Rin",
-    text: "当用户旋转屏幕、切换深色模式、或者修改系统语言时，系统会毫不留情地销毁当前的 Activity，然后立刻重建一个新的。这意味着：所有内存里的变量都会被清空。",
-    viewType: "CODE_EXPLAIN",
+    text: "这么多的松果，竖屏拍不全吧？你把手机横过来拍（旋转屏幕）试试？",
+    viewType: "IMAGE",
     viewContent: {
-      codeSnippet: `// 🌪️ 配置变更流程 (The Wind)
-
-// 1. 用户操作：旋转屏幕 / 切换深色模式
-// 2. 系统销毁旧实例
-Activity.onDestroy() -> mapOfVariables.clear()
-
-// 3. 系统创建新实例
-Activity.onCreate() -> 重新运行所有代码
-// 💀 之前 remember 的数据全部丢失！`
+      imagePrompt: "凛在一旁喝茶，建议抚子旋转手机。"
     }
   },
   {
     id: 3,
     speaker: "Nadeshiko",
-    text: "诶？！那我辛辛苦苦填写的注册表格，如果手滑切了个深色模式，岂不是全没了？这也太惨了吧！",
-    viewType: "IMAGE",
+    text: "好主意！那我旋转一下……咦？！等等！我的松果计数怎么变成 0 了？！刚才明明是 5 个的！",
+    viewType: "INTERACTIVE_LAB",
     viewContent: {
-      imagePrompt: "抚子对着手机惨叫，手机屏幕上显示着空白的表格。"
+      interactiveConfig: { mode: 'PHOTO_CRISIS' }
     }
   },
   {
     id: 4,
-    speaker: "Sensei",
-    text: "没错。`remember` 的记忆存储在 Slot Table (内存) 中，它依附于 Activity。Activity 死了，它也活不了。来做个小测试，看看你理解了没。",
-    viewType: "INTERACTIVE_LAB",
+    speaker: "Rin",
+    text: "这就是 Android 世界的自然法则。当你旋转屏幕时，为了适应新布局，系统会把当前的“世界”（Activity）销毁并重建。",
+    viewType: "CODE_EXPLAIN",
     viewContent: {
-      interactiveConfig: { mode: 'QUIZ_SCENARIO' }
+      codeSnippet: `// 📸 拍照危机 (Configuration Change)
+
+// 1. 竖屏 -> 横屏
+// 系统认为布局可能变了，需要重新加载资源
+Activity.onDestroy() // 旧世界毁灭，remember 的内存被清空
+
+// 2. 重建世界
+Activity.onCreate()  // 新世界诞生
+// 3. 代码重新运行
+var count by remember { ... } // 重新初始化为 0`
     }
   },
   {
     id: 5,
-    speaker: "Rin",
-    text: "要解决这个问题，我们需要 `rememberSaveable`。它会把数据打包进系统的 Bundle (保险箱) 里。即使 Activity 重建，数据也能从 Bundle 里取出来。",
-    viewType: "CODE_EXPLAIN",
+    speaker: "Sensei",
+    text: "普通的 `remember` 就像一个敞口的篮子。手机一倒（Activity 销毁），东西就掉光了。你需要一个“带拉链的背包”—— `rememberSaveable`。",
+    viewType: "IMAGE",
     viewContent: {
-      codeSnippet: `// 🛡️ rememberSaveable 的原理
-
-// 保存 (onSaveInstanceState):
-// Activity 销毁前，自动把数据序列化写入 Bundle
-Bundle.put("key", value) 
-
-// 恢复 (onRestoreInstanceState):
-// Activity 重建后，自动从 Bundle 读取数据
-val value = Bundle.get("key")`
+      imagePrompt: "前辈拿出一个带有坚固拉链的登山背包，示意图显示它可以把数据锁在里面。"
     }
   },
   {
     id: 6,
     speaker: "Sensei",
-    text: "但是，保险箱(Bundle)空间有限，不是什么都能塞进去的。它只能存基本类型(Int, String)或实现了 Parcelable 接口的对象。再来考考你。",
-    viewType: "INTERACTIVE_LAB",
+    text: "它会把数据打包存进系统的 Bundle（保险箱）里。即使世界重建，它也能从保险箱里把数据取回来。",
+    viewType: "CODE_EXPLAIN",
     viewContent: {
-      interactiveConfig: { mode: 'QUIZ_TYPE_SAFETY' }
+      codeSnippet: `// 🎒 使用带拉链的背包
+
+@Composable
+fun PineconeCounter() {
+    // rememberSaveable: 即使旋转屏幕，数据也不会丢！
+    // 它自动把数据存入 Bundle (onSaveInstanceState)
+    var count by rememberSaveable { mutableStateOf(0) }
+    
+    // ...
+}`
     }
   },
   {
     id: 7,
     speaker: "Nadeshiko",
-    text: "我懂了！网络连接对象(Socket)这种太复杂的东西塞不进 Bundle，所以会报错！",
-    viewType: "IMAGE",
+    text: "噢噢！带拉链的背包！让我们再试一次！这次左边放敞口篮子，右边放拉链背包，看看旋转后会发生什么！",
+    viewType: "INTERACTIVE_LAB",
     viewContent: {
-      imagePrompt: "抚子恍然大悟，手里拿着一个写着 Socket 的巨大插头，试图塞进一个小小的保险箱，但塞不进去。"
+      interactiveConfig: { mode: 'BACKPACK_FIX' }
     }
   },
   {
     id: 8,
-    speaker: "Rin",
-    text: "好，最后是实战演练。我们来做两个计数器，一个用 `remember`，一个用 `rememberSaveable`。旋转屏幕，看看谁能活下来。",
-    viewType: "INTERACTIVE_LAB",
-    viewContent: {
-      interactiveConfig: { mode: 'COMPARISON_LAB' }
-    }
-  },
-  {
-    id: 9,
-    speaker: "Rin",
-    text: "看到了吗？这就是 `rememberSaveable` 的核心价值。对于任何丢失了会让用户抓狂的数据（输入框、滚动位置），都要用它！",
+    speaker: "Nadeshiko",
+    text: "太棒了！背包里的松果一个都没少！以后重要的东西（比如用户输入的名字、滚动位置）我都要放在背包里！",
     viewType: "VICTORY",
     viewContent: {}
   }

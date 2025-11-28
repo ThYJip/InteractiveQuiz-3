@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { InteractiveState } from './types';
-import { Smartphone, RefreshCw, Archive, AlertTriangle, CheckCircle2, HelpCircle, XCircle } from 'lucide-react';
+import { Camera, RefreshCw, ShoppingBasket, Backpack, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 interface Props {
   config: InteractiveState;
@@ -9,217 +9,166 @@ interface Props {
 }
 
 const InteractiveConfigLab: React.FC<Props> = ({ config, onComplete }) => {
-  const [quizAnswer, setQuizAnswer] = useState<'A' | 'B' | 'C' | null>(null);
   const [isRotated, setIsRotated] = useState(false);
-  const [countNormal, setCountNormal] = useState(0);
-  const [countSaved, setCountSaved] = useState(0);
-  const [activityStatus, setActivityStatus] = useState<'ALIVE' | 'DESTROYED' | 'RECREATED'>('ALIVE');
-  const [labCompleted, setLabCompleted] = useState(false);
+  const [basketCount, setBasketCount] = useState(0); // Represents remember
+  const [backpackCount, setBackpackCount] = useState(0); // Represents rememberSaveable
+  const [hasRotatedOnce, setHasRotatedOnce] = useState(false);
 
-  // === QUIZ 1: SCENARIO ===
-  if (config.mode === 'QUIZ_SCENARIO') {
-    return (
-      <div className="w-full h-full flex flex-col items-center justify-center p-4">
-         <div className="bg-white rounded-3xl p-8 shadow-xl max-w-2xl w-full border-4 border-teal-100">
-             <h3 className="text-xl font-bold text-teal-800 mb-6 flex items-center gap-2">
-                 <HelpCircle /> 营地小测验 (1/2)
-             </h3>
-             <p className="text-slate-700 mb-6 text-lg font-medium leading-relaxed">
-                 用户填写注册表单到一半，突然切换了手机的“深色模式”（导致 Activity 重建）。
-                 如果你只使用了 <code>remember {'{'} mutableStateOf("") {'}'}</code>，结果会怎样？
-             </p>
+  const isCrisisMode = config.mode === 'PHOTO_CRISIS';
 
-             <div className="flex flex-col gap-3">
-                 <button 
-                    onClick={() => setQuizAnswer('A')}
-                    disabled={quizAnswer === 'B'}
-                    className={`p-4 rounded-xl border-2 text-left transition-all ${quizAnswer === 'A' ? 'bg-red-50 border-red-500 text-red-700' : 'border-slate-200 hover:border-teal-300'}`}
-                 >
-                     <span className="font-bold mr-2">A.</span> 姓名依然还在，用户体验良好。
-                 </button>
-                 <button 
-                    onClick={() => { setQuizAnswer('B'); setTimeout(onComplete, 2000); }}
-                    disabled={quizAnswer === 'B'}
-                    className={`p-4 rounded-xl border-2 text-left transition-all ${quizAnswer === 'B' ? 'bg-green-50 border-green-500 text-green-700 shadow-md transform scale-105' : 'border-slate-200 hover:border-teal-300'}`}
-                 >
-                     <span className="font-bold mr-2">B.</span> 姓名清空了，用户需要重新输入。
-                 </button>
-             </div>
-
-             {quizAnswer === 'A' && (
-                 <div className="mt-4 p-3 bg-red-100 text-red-800 rounded-lg text-sm flex items-center gap-2 animate-pulse">
-                     <XCircle size={16}/> 错误。remember 无法跨越 Activity 的销毁重建。
-                 </div>
-             )}
-             {quizAnswer === 'B' && (
-                 <div className="mt-4 p-3 bg-green-100 text-green-800 rounded-lg text-sm flex items-center gap-2 animate-bounce">
-                     <CheckCircle2 size={16}/> 正确！数据丢失了，用户会很生气。
-                 </div>
-             )}
-         </div>
-      </div>
-    );
-  }
-
-  // === QUIZ 2: TYPE SAFETY ===
-  if (config.mode === 'QUIZ_TYPE_SAFETY') {
-    return (
-      <div className="w-full h-full flex flex-col items-center justify-center p-4">
-         <div className="bg-white rounded-3xl p-8 shadow-xl max-w-2xl w-full border-4 border-teal-100">
-             <h3 className="text-xl font-bold text-teal-800 mb-6 flex items-center gap-2">
-                 <HelpCircle /> 营地小测验 (2/2)
-             </h3>
-             <p className="text-slate-700 mb-6 text-lg font-medium leading-relaxed">
-                 以下哪种代码会导致 App 崩溃 (Crash)？
-             </p>
-
-             <div className="flex flex-col gap-3">
-                 <button 
-                    onClick={() => setQuizAnswer('A')}
-                    disabled={quizAnswer === 'C'}
-                    className={`p-4 rounded-xl border-2 text-left transition-all ${quizAnswer === 'A' ? 'bg-red-50 border-red-500 text-red-700' : 'border-slate-200 hover:border-teal-300'}`}
-                 >
-                     <span className="font-bold mr-2">A.</span> <code>rememberSaveable {'{'} mutableStateOf("Alice") {'}'}</code>
-                 </button>
-                 <button 
-                    onClick={() => setQuizAnswer('B')}
-                    disabled={quizAnswer === 'C'}
-                    className={`p-4 rounded-xl border-2 text-left transition-all ${quizAnswer === 'B' ? 'bg-red-50 border-red-500 text-red-700' : 'border-slate-200 hover:border-teal-300'}`}
-                 >
-                     <span className="font-bold mr-2">B.</span> <code>rememberSaveable {'{'} mutableStateOf(25) {'}'}</code>
-                 </button>
-                 <button 
-                    onClick={() => { setQuizAnswer('C'); setTimeout(onComplete, 2500); }}
-                    disabled={quizAnswer === 'C'}
-                    className={`p-4 rounded-xl border-2 text-left transition-all ${quizAnswer === 'C' ? 'bg-green-50 border-green-500 text-green-700 shadow-md transform scale-105' : 'border-slate-200 hover:border-teal-300'}`}
-                 >
-                     <span className="font-bold mr-2">C.</span> <code>rememberSaveable {'{'} mutableStateOf(Socket()) {'}'}</code>
-                 </button>
-             </div>
-
-             {quizAnswer && quizAnswer !== 'C' && (
-                 <div className="mt-4 p-3 bg-red-100 text-red-800 rounded-lg text-sm flex items-center gap-2">
-                     <XCircle size={16}/> 错误。基本类型 (String, Int) 是可以直接保存到 Bundle 的。
-                 </div>
-             )}
-             {quizAnswer === 'C' && (
-                 <div className="mt-4 p-3 bg-green-100 text-green-800 rounded-lg text-sm flex items-center gap-2 animate-bounce">
-                     <CheckCircle2 size={16}/> 正确！Socket 不是 Parcelable，无法序列化存入 Bundle，会导致 Crash。
-                 </div>
-             )}
-         </div>
-      </div>
-    );
-  }
-
-  // === COMPARISON LAB ===
   const handleRotate = () => {
-    // 1. Destroy Phase
-    setActivityStatus('DESTROYED');
-    setTimeout(() => {
-        // 2. Recreate Phase
-        setIsRotated(prev => !prev);
-        setActivityStatus('RECREATED');
-        
-        // LOGIC: remember dies, rememberSaveable lives
-        setCountNormal(0);
-        // countSaved stays the same
+    setIsRotated(prev => !prev);
+    setHasRotatedOnce(true);
 
-        if (countSaved > 0) {
-            setLabCompleted(true);
-            setTimeout(onComplete, 2000);
+    // SIMULATION LOGIC:
+    // When rotated (Activity Recreated), "Basket" (remember) loses data.
+    setBasketCount(0); 
+    
+    // "Backpack" (rememberSaveable) keeps data.
+    // (backpackCount stays same)
+
+    if (!isCrisisMode) {
+        // In Fix mode, if we rotated and backpack still has items, we win
+        if (backpackCount > 0) {
+            setTimeout(onComplete, 2500);
         }
-    }, 800);
+    } else {
+        // In Crisis mode, if we rotated and lost items, proceed to explanation
+        setTimeout(onComplete, 2500);
+    }
   };
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-start p-2 gap-6 overflow-y-auto pb-32 custom-scrollbar">
        
-       {/* Instruction */}
-       <div className="bg-teal-50 text-teal-800 px-6 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2">
-           <span className="bg-white px-2 rounded-full text-xs border border-teal-200">任务</span>
-           把两个计数器都点到 5 以上，然后点击“旋转屏幕”。
+       {/* Instruction Pill */}
+       <div className="bg-white/80 backdrop-blur text-green-800 px-6 py-2 rounded-full font-bold text-sm shadow-sm border border-green-200 flex items-center gap-2 animate-fade-in">
+           <Camera size={16} />
+           {isCrisisMode 
+             ? "任务：捡几个松果，然后旋转相机拍照" 
+             : "任务：对比测试！给两边都加松果，然后旋转"}
        </div>
 
-       {/* Phone Simulator */}
-       <div className={`relative transition-all duration-700 ease-in-out shrink-0
-           ${isRotated ? 'w-[450px] h-[220px]' : 'w-[280px] h-[450px]'}
+       {/* Camera Viewfinder Simulator */}
+       <div className={`
+           relative transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]
+           ${isRotated ? 'w-[450px] h-[240px]' : 'w-[280px] h-[450px]'}
+           bg-slate-800 rounded-3xl shadow-2xl border-8 border-slate-700 flex flex-col items-center justify-center overflow-hidden shrink-0
        `}>
-           {/* Phone Frame */}
-           <div className={`
-                w-full h-full bg-slate-800 rounded-[2rem] border-[8px] border-slate-900 shadow-2xl relative overflow-hidden flex flex-col
-                ${activityStatus === 'DESTROYED' ? 'scale-90 opacity-0 blur-sm' : 'scale-100 opacity-100 blur-0'}
-                transition-all duration-500
-           `}>
-               {/* Screen Content */}
-               <div className="flex-1 bg-slate-50 relative flex flex-col p-4 overflow-y-auto">
-                   <div className="text-center mb-4">
-                       <h3 className="font-bold text-slate-700">Counter App</h3>
-                       <div className="text-[10px] text-slate-400 font-mono">Process ID: {activityStatus === 'RECREATED' ? '9021 (New)' : '4532'}</div>
+           {/* Camera Lens UI Overlay */}
+           <div className="absolute inset-4 border-2 border-white/20 rounded-2xl pointer-events-none z-10">
+               <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-white/50"></div>
+               <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-white/50"></div>
+               <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-white/50"></div>
+               <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-white/50"></div>
+               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/50 text-[10px] font-mono bg-black/20 px-2 rounded">
+                   {isRotated ? 'LANDSCAPE 16:9' : 'PORTRAIT 9:16'}
+               </div>
+               {hasRotatedOnce && (
+                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 text-white font-bold px-4 py-2 rounded-xl backdrop-blur-md animate-ping-once">
+                       ACTIVITY RECREATED!
+                   </div>
+               )}
+           </div>
+
+           {/* Scene Content */}
+           <div className="w-full h-full bg-gradient-to-b from-blue-200 to-green-100 relative p-6 flex flex-col items-center justify-center gap-4 transition-all duration-700">
+               
+               {/* Background Trees */}
+               <div className="absolute bottom-0 w-full flex justify-between opacity-40 text-green-800 pointer-events-none">
+                   <span className="text-6xl">🌲</span>
+                   <span className="text-4xl">🌳</span>
+                   <span className="text-7xl">🌲</span>
+               </div>
+
+               <div className={`flex gap-4 z-20 transition-all duration-700 ${isRotated ? 'flex-row items-end' : 'flex-col items-center'}`}>
+                   
+                   {/* Item 1: The Basket (Remember) */}
+                   <div className="flex flex-col items-center gap-2">
+                       <div className="relative group">
+                           <button 
+                             onClick={() => setBasketCount(c => c + 1)}
+                             className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center border-4 border-amber-300 shadow-lg active:scale-90 transition-transform hover:bg-amber-50"
+                           >
+                               <ShoppingBasket size={32} className="text-amber-700" />
+                               {basketCount > 0 && (
+                                   <span className="absolute -top-2 -right-2 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow">
+                                       {basketCount}
+                                   </span>
+                               )}
+                           </button>
+                           <span className="text-[10px] bg-white/80 px-2 py-0.5 rounded text-slate-500 font-mono mt-1 block text-center">
+                               remember
+                           </span>
+                       </div>
+                       {hasRotatedOnce && basketCount === 0 && (
+                           <span className="text-xs text-red-500 font-bold bg-white/80 px-2 rounded animate-bounce">
+                               Dropped!
+                           </span>
+                       )}
                    </div>
 
-                   <div className={`flex gap-4 ${isRotated ? 'flex-row' : 'flex-col'}`}>
-                       
-                       {/* Counter 1: Normal */}
-                       <div className="flex-1 bg-red-50 border-2 border-red-100 rounded-xl p-3 flex flex-col items-center gap-2">
-                           <span className="text-[10px] font-bold text-red-400 uppercase tracking-wider">remember</span>
-                           <span className="text-3xl font-black text-slate-700">{countNormal}</span>
-                           <button 
-                               onClick={() => setCountNormal(n => n + 1)}
-                               className="w-full py-2 bg-white border border-red-200 rounded-lg text-red-500 font-bold hover:bg-red-50 active:scale-95 text-xs"
-                           >
-                               +1 (RAM)
-                           </button>
+                   {/* Item 2: The Backpack (RememberSaveable) - Only in Fix Mode */}
+                   {!isCrisisMode && (
+                       <div className="flex flex-col items-center gap-2">
+                           <div className="relative group">
+                               <button 
+                                 onClick={() => setBackpackCount(c => c + 1)}
+                                 className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center border-4 border-blue-300 shadow-lg active:scale-90 transition-transform hover:bg-blue-50"
+                               >
+                                   <Backpack size={32} className="text-blue-700" />
+                                   {backpackCount > 0 && (
+                                       <span className="absolute -top-2 -right-2 bg-green-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow">
+                                           {backpackCount}
+                                       </span>
+                                   )}
+                               </button>
+                               <span className="text-[10px] bg-white/80 px-2 py-0.5 rounded text-slate-500 font-mono mt-1 block text-center">
+                                   saveable
+                               </span>
+                           </div>
+                           {hasRotatedOnce && backpackCount > 0 && (
+                               <span className="text-xs text-green-600 font-bold bg-white/80 px-2 rounded animate-pulse">
+                                   Saved!
+                               </span>
+                           )}
                        </div>
+                   )}
 
-                       {/* Counter 2: Saveable */}
-                       <div className="flex-1 bg-green-50 border-2 border-green-100 rounded-xl p-3 flex flex-col items-center gap-2">
-                           <span className="text-[10px] font-bold text-green-500 uppercase tracking-wider">rememberSaveable</span>
-                           <span className="text-3xl font-black text-slate-700">{countSaved}</span>
-                           <button 
-                               onClick={() => setCountSaved(n => n + 1)}
-                               className="w-full py-2 bg-white border border-green-200 rounded-lg text-green-600 font-bold hover:bg-green-50 active:scale-95 text-xs"
-                           >
-                               +1 (Bundle)
-                           </button>
-                       </div>
-                   </div>
                </div>
            </div>
 
            {/* Rotate Button */}
            <button 
              onClick={handleRotate}
-             className="absolute -right-16 top-1/2 -translate-y-1/2 bg-teal-600 p-4 rounded-full shadow-xl text-white hover:bg-teal-500 hover:rotate-180 transition-all duration-500 z-20"
+             className="absolute bottom-4 z-30 bg-slate-900/80 text-white p-3 rounded-full hover:bg-slate-700 active:scale-95 transition-all border border-white/20"
+             title="Rotate Screen"
            >
-               <RefreshCw size={24} />
+               <RefreshCw size={24} className={`transition-transform duration-500 ${isRotated ? 'rotate-90' : 'rotate-0'}`} />
            </button>
        </div>
 
-       {/* Comparison Feedback */}
-       <div className={`w-full max-w-xl rounded-2xl border-l-8 p-5 shadow-md flex flex-col gap-2 transition-all shrink-0 bg-white border-slate-200`}>
-           <div className="flex items-center gap-2 mb-2">
-               <Archive size={18} className="text-teal-600"/>
-               <h4 className="font-bold text-slate-700">状态快照 / State Snapshot</h4>
-           </div>
-           
-           <div className="grid grid-cols-2 gap-4 text-xs font-mono">
-                <div className={`${activityStatus === 'RECREATED' && countNormal === 0 ? 'text-red-600 font-bold' : 'text-slate-500'}`}>
-                    Normal: {countNormal}
-                    {activityStatus === 'RECREATED' && countNormal === 0 && " (LOST)"}
-                </div>
-                <div className={`${activityStatus === 'RECREATED' && countSaved > 0 ? 'text-green-600 font-bold' : 'text-slate-500'}`}>
-                    Saved: {countSaved}
-                    {activityStatus === 'RECREATED' && countSaved > 0 && " (RESTORED)"}
-                </div>
-           </div>
-
-           {labCompleted && (
-               <div className="mt-2 bg-teal-50 text-teal-800 p-3 rounded-lg text-sm font-medium animate-pulse">
-                   🎉 实验成功！普通变量归零了，但 Saveable 的数据活下来了！
+       {/* Feedback Card */}
+       {hasRotatedOnce && (
+           <div className={`w-full max-w-xl rounded-2xl p-5 shadow-lg flex gap-4 transition-all shrink-0 animate-slide-up
+               ${isCrisisMode ? 'bg-red-50 border-l-8 border-red-400' : 'bg-green-50 border-l-8 border-green-500'}
+           `}>
+               <div className="shrink-0 pt-1">
+                   {isCrisisMode ? <AlertCircle className="text-red-500" /> : <CheckCircle2 className="text-green-600" />}
                </div>
-           )}
-       </div>
+               <div>
+                   <h4 className={`font-bold text-lg mb-1 ${isCrisisMode ? 'text-red-800' : 'text-green-800'}`}>
+                       {isCrisisMode ? "东西掉光了！" : "背包守护了数据！"}
+                   </h4>
+                   <p className="text-slate-600 text-sm leading-relaxed">
+                       {isCrisisMode 
+                         ? "Activity 销毁时，普通的 remember 内存被清空。就像敞口篮子翻到了一样。"
+                         : "rememberSaveable 把数据存进了 Bundle (系统保险箱)。即使 Activity 重建，数据也安全地取回来了！"
+                       }
+                   </p>
+               </div>
+           </div>
+       )}
 
     </div>
   );

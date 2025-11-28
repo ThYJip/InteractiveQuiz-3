@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Speaker } from './types';
 import { Tent, User, ArrowRight, Ghost, Glasses, Home } from 'lucide-react';
@@ -61,7 +62,7 @@ const DialogLayer: React.FC<Props> = ({ speaker, text, onNext, canProceed, isLas
             icon: <Glasses size={20} className="text-green-500" />
         };
       default:
-        return { name: '小奇', bg: 'bg-teal-100', border: 'border-teal-400', text: 'text-teal-600', icon: <Tent size={20} /> };
+        return { name: '小奇', bg: 'bg-orange-100', border: 'border-orange-400', text: 'text-orange-600', icon: <Tent size={20} /> };
     }
   };
 
@@ -69,7 +70,7 @@ const DialogLayer: React.FC<Props> = ({ speaker, text, onNext, canProceed, isLas
 
   return (
     <div className="fixed bottom-6 left-4 right-4 z-50 flex justify-center pointer-events-none">
-      <div className="relative w-full max-w-4xl bg-white rounded-[2rem] p-8 pb-10 shadow-[0_20px_50px_-12px_rgba(20,184,166,0.2)] border border-teal-100 pointer-events-auto">
+      <div className="relative w-full max-w-4xl bg-white rounded-[2rem] p-8 pb-10 shadow-[0_20px_50px_-12px_rgba(220,252,231,1)] border border-green-100 pointer-events-auto">
         
         {/* Nameplate */}
         <div className={`absolute -top-5 left-10 ${config.bg} border-2 ${config.border} px-6 py-2 rounded-full shadow-sm z-10 flex items-center gap-2 transform -rotate-1`}>
@@ -77,17 +78,17 @@ const DialogLayer: React.FC<Props> = ({ speaker, text, onNext, canProceed, isLas
           <span className={`font-bold ${config.text} tracking-wider`}>{config.name}</span>
         </div>
 
-        {/* Corner Brackets (Wind/Teal Style) */}
-        <div className="absolute top-4 left-4 w-6 h-6 border-t-4 border-l-4 border-teal-300 rounded-tl-xl opacity-60" />
-        <div className="absolute top-4 right-4 w-6 h-6 border-t-4 border-r-4 border-teal-300 rounded-tr-xl opacity-60" />
-        <div className="absolute bottom-4 left-4 w-6 h-6 border-b-4 border-l-4 border-teal-300 rounded-bl-xl opacity-60" />
-        <div className="absolute bottom-4 right-4 w-6 h-6 border-b-4 border-r-4 border-teal-300 rounded-br-xl opacity-60" />
+        {/* Corner Brackets (Green/Wood) */}
+        <div className="absolute top-4 left-4 w-6 h-6 border-t-4 border-l-4 border-green-300 rounded-tl-xl opacity-60" />
+        <div className="absolute top-4 right-4 w-6 h-6 border-t-4 border-r-4 border-green-300 rounded-tr-xl opacity-60" />
+        <div className="absolute bottom-4 left-4 w-6 h-6 border-b-4 border-l-4 border-green-300 rounded-bl-xl opacity-60" />
+        <div className="absolute bottom-4 right-4 w-6 h-6 border-b-4 border-r-4 border-green-300 rounded-br-xl opacity-60" />
 
         {/* Content */}
         <div className="mt-2 pr-24">
             <p className="text-slate-700 text-lg md:text-xl leading-relaxed font-bold tracking-wide">
             {displayedText}
-            {isTyping && <span className="inline-block w-2 h-5 bg-teal-400 ml-1 animate-pulse align-middle rounded-full"></span>}
+            {isTyping && <span className="inline-block w-2 h-5 bg-green-400 ml-1 animate-pulse align-middle rounded-full"></span>}
             </p>
         </div>
 
@@ -98,7 +99,7 @@ const DialogLayer: React.FC<Props> = ({ speaker, text, onNext, canProceed, isLas
                 {!isLastStep && canProceed && (
                     <button 
                         onClick={onNext}
-                        className="absolute bottom-6 right-8 text-teal-500 animate-bounce flex items-center gap-1 hover:text-teal-700 transition-colors"
+                        className="absolute bottom-6 right-8 text-green-500 animate-bounce flex items-center gap-1 hover:text-green-700 transition-colors"
                     >
                     <span className="text-sm font-bold uppercase tracking-widest">Next</span>
                     <ArrowRight size={20} />
@@ -109,7 +110,7 @@ const DialogLayer: React.FC<Props> = ({ speaker, text, onNext, canProceed, isLas
                 {isLastStep && onHome && (
                      <button 
                         onClick={onHome}
-                        className="absolute bottom-6 right-8 bg-teal-100 hover:bg-teal-200 text-teal-700 px-5 py-2 rounded-xl font-bold flex items-center gap-2 shadow-sm transition-all animate-pulse"
+                        className="absolute bottom-6 right-8 bg-green-100 hover:bg-green-200 text-green-700 px-5 py-2 rounded-xl font-bold flex items-center gap-2 shadow-sm transition-all animate-pulse"
                     >
                         <Home size={18} />
                         <span>返回大厅</span>

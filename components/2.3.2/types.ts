@@ -4,8 +4,8 @@ export type Speaker = "Chi" | "Rin" | "Nadeshiko" | "Sensei";
 export type ViewType = "IMAGE" | "CODE_EXPLAIN" | "INTERACTIVE_LAB" | "VICTORY";
 
 export interface InteractiveState {
-    mode: 'QUIZ_SCENARIO' | 'QUIZ_TYPE_SAFETY' | 'COMPARISON_LAB'; 
-    targetAction?: 'COMPLETE_QUIZ' | 'ROTATE_AND_COMPARE';
+    mode: 'PHOTO_CRISIS' | 'BACKPACK_FIX'; 
+    targetAction?: 'ROTATE_AND_OBSERVE';
 }
 
 export interface ScriptStep {
