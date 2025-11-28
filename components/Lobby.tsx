@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick, Image as ImageIcon, Wind, Gamepad2, Recycle, Filter } from 'lucide-react';
+import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick, Image as ImageIcon, Wind, Gamepad2, Recycle, Filter, Box } from 'lucide-react';
 
 interface Props {
   onSelectLesson: (lessonId: string) => void;
@@ -23,52 +23,78 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl w-full">
           
-          {/* Card 4.1.1: Side Effects (Purple/Storm Theme) */}
+          {/* Card 4.3.1: ViewModel (Orange/Cabin) */}
           <button 
-            onClick={() => onSelectLesson('4.1.1')}
-            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-indigo-100 hover:border-indigo-300 overflow-hidden"
+            onClick={() => onSelectLesson('4.3.1')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-orange-100 hover:border-orange-300 overflow-hidden"
           >
-            <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-100 rounded-full blur-2xl group-hover:bg-indigo-200 transition-colors opacity-60"></div>
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-orange-100 rounded-full blur-2xl group-hover:bg-orange-200 transition-colors opacity-60"></div>
             
             <div className="relative z-10">
-              <div className="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mb-6 text-indigo-600 group-hover:scale-110 transition-transform duration-500">
-                <Wind size={32} strokeWidth={2.5} />
+              <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6 text-orange-600 group-hover:scale-110 transition-transform duration-500">
+                <Box size={32} strokeWidth={2.5} />
               </div>
               
-              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-indigo-700 transition-colors">
-                4.1.1 副作用与 LaunchedEffect
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-orange-700 transition-colors">
+                4.3.1 ViewModel 架构
               </h2>
               <p className="text-slate-500 font-medium mb-6 leading-relaxed">
-                狂风大作！篝火总是被吹灭？使用 LaunchedEffect 打造防风罩，驯服副作用！
+                帐篷（UI）塌了没关系，物资（数据）要放在小木屋（ViewModel）里！学习 StateFlow 与数据持久化。
               </p>
               
-              <div className="flex items-center gap-2 text-indigo-600 font-bold text-sm">
+              <div className="flex items-center gap-2 text-orange-600 font-bold text-sm">
                 <Sparkles size={16} />
-                <span>副作用管理 (Cozy Camp)</span>
+                <span>架构基础 (Cozy Camp)</span>
               </div>
             </div>
           </button>
 
-          {/* Card 4.1.2: Coroutine Scopes (Cyber Theme Mapping) */}
+          {/* Card 4.2.2: Derived State (Green/Binoculars) */}
           <button 
-            onClick={() => onSelectLesson('4.1.2')}
-            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-cyan-100 hover:border-cyan-300 overflow-hidden"
+            onClick={() => onSelectLesson('4.2.2')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-green-100 hover:border-green-300 overflow-hidden"
           >
-            <div className="absolute -top-10 -right-10 w-40 h-40 bg-cyan-100 rounded-full blur-2xl group-hover:bg-cyan-200 transition-colors opacity-60"></div>
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-green-100 rounded-full blur-2xl group-hover:bg-green-200 transition-colors opacity-60"></div>
             
             <div className="relative z-10">
-              <div className="w-16 h-16 bg-cyan-100 rounded-2xl flex items-center justify-center mb-6 text-cyan-600 group-hover:scale-110 transition-transform duration-500">
-                <Zap size={32} strokeWidth={2.5} />
+              <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6 text-green-600 group-hover:scale-110 transition-transform duration-500">
+                <Filter size={32} strokeWidth={2.5} />
               </div>
               
-              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-cyan-700 transition-colors">
-                4.1.2 协程作用域
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-green-700 transition-colors">
+                4.2.2 衍生状态优化
               </h2>
               <p className="text-slate-500 font-medium mb-6 leading-relaxed">
-                跟随凛学习 structured concurrency。理解生命周期，拒绝内存泄漏！
+                爬山太累了？使用 derivedStateOf 像望远镜一样过滤高频信号，拒绝无效重组！
               </p>
               
-              <div className="flex items-center gap-2 text-cyan-600 font-bold text-sm">
+              <div className="flex items-center gap-2 text-green-600 font-bold text-sm">
+                <Sparkles size={16} />
+                <span>性能优化 (Cozy Camp)</span>
+              </div>
+            </div>
+          </button>
+
+          {/* Card 4.2.1: Manual Scope (Blue/Cyber) */}
+          <button 
+            onClick={() => onSelectLesson('4.2.1')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-blue-100 hover:border-blue-300 overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-100 rounded-full blur-2xl group-hover:bg-blue-200 transition-colors opacity-60"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 text-blue-600 group-hover:scale-110 transition-transform duration-500">
+                <Gamepad2 size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">
+                4.2.1 手动挡协程
+              </h2>
+              <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+                进入协程驾驶舱！使用 rememberCoroutineScope，像玩游戏一样在回调中发射技能。
+              </p>
+              
+              <div className="flex items-center gap-2 text-blue-600 font-bold text-sm">
                 <Sparkles size={16} />
                 <span>进阶并发 (Cyber Mode)</span>
               </div>
@@ -101,54 +127,54 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
             </div>
           </button>
 
-          {/* Card 4.2.1: Manual Scope (Blue/Cyber) */}
+          {/* Card 4.1.2: Coroutine Scopes (Cyber Theme Mapping) */}
           <button 
-            onClick={() => onSelectLesson('4.2.1')}
-            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-blue-100 hover:border-blue-300 overflow-hidden"
+            onClick={() => onSelectLesson('4.1.2')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-cyan-100 hover:border-cyan-300 overflow-hidden"
           >
-            <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-100 rounded-full blur-2xl group-hover:bg-blue-200 transition-colors opacity-60"></div>
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-cyan-100 rounded-full blur-2xl group-hover:bg-cyan-200 transition-colors opacity-60"></div>
             
             <div className="relative z-10">
-              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 text-blue-600 group-hover:scale-110 transition-transform duration-500">
-                <Gamepad2 size={32} strokeWidth={2.5} />
+              <div className="w-16 h-16 bg-cyan-100 rounded-2xl flex items-center justify-center mb-6 text-cyan-600 group-hover:scale-110 transition-transform duration-500">
+                <Zap size={32} strokeWidth={2.5} />
               </div>
               
-              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">
-                4.2.1 手动挡协程
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-cyan-700 transition-colors">
+                4.1.2 协程作用域
               </h2>
               <p className="text-slate-500 font-medium mb-6 leading-relaxed">
-                进入协程驾驶舱！使用 rememberCoroutineScope，像玩游戏一样在回调中发射技能。
+                跟随凛学习 structured concurrency。理解生命周期，拒绝内存泄漏！
               </p>
               
-              <div className="flex items-center gap-2 text-blue-600 font-bold text-sm">
+              <div className="flex items-center gap-2 text-cyan-600 font-bold text-sm">
                 <Sparkles size={16} />
                 <span>进阶并发 (Cyber Mode)</span>
               </div>
             </div>
           </button>
 
-          {/* Card 4.2.2: Derived State (Green/Binoculars) */}
+          {/* Card 4.1.1: Side Effects (Purple/Storm Theme) */}
           <button 
-            onClick={() => onSelectLesson('4.2.2')}
-            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-green-100 hover:border-green-300 overflow-hidden"
+            onClick={() => onSelectLesson('4.1.1')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-indigo-100 hover:border-indigo-300 overflow-hidden"
           >
-            <div className="absolute -top-10 -right-10 w-40 h-40 bg-green-100 rounded-full blur-2xl group-hover:bg-green-200 transition-colors opacity-60"></div>
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-100 rounded-full blur-2xl group-hover:bg-indigo-200 transition-colors opacity-60"></div>
             
             <div className="relative z-10">
-              <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6 text-green-600 group-hover:scale-110 transition-transform duration-500">
-                <Filter size={32} strokeWidth={2.5} />
+              <div className="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mb-6 text-indigo-600 group-hover:scale-110 transition-transform duration-500">
+                <Wind size={32} strokeWidth={2.5} />
               </div>
               
-              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-green-700 transition-colors">
-                4.2.2 衍生状态优化
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-indigo-700 transition-colors">
+                4.1.1 副作用与 LaunchedEffect
               </h2>
               <p className="text-slate-500 font-medium mb-6 leading-relaxed">
-                爬山太累了？使用 derivedStateOf 像望远镜一样过滤高频信号，拒绝无效重组！
+                狂风大作！篝火总是被吹灭？使用 LaunchedEffect 打造防风罩，驯服副作用！
               </p>
               
-              <div className="flex items-center gap-2 text-green-600 font-bold text-sm">
+              <div className="flex items-center gap-2 text-indigo-600 font-bold text-sm">
                 <Sparkles size={16} />
-                <span>性能优化 (Cozy Camp)</span>
+                <span>副作用管理 (Cozy Camp)</span>
               </div>
             </div>
           </button>
