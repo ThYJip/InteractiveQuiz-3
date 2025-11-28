@@ -1,10 +1,11 @@
+
 export type Speaker = "Chi" | "Rin" | "Nadeshiko" | "Sensei";
 
 export type ViewType = "IMAGE" | "CODE_EXPLAIN" | "INTERACTIVE_LAB" | "VICTORY";
 
 export interface InteractiveState {
-    mode: 'ROTATION_PROBLEM' | 'SAVABLE_FIX'; 
-    targetAction?: 'ROTATE_AND_FAIL' | 'ROTATE_AND_SUCCESS';
+    mode: 'QUIZ_SCENARIO' | 'QUIZ_TYPE_SAFETY' | 'COMPARISON_LAB'; 
+    targetAction?: 'COMPLETE_QUIZ' | 'ROTATE_AND_COMPARE';
 }
 
 export interface ScriptStep {

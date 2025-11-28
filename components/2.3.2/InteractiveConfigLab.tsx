@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { InteractiveState } from './types';
-import { Smartphone, RefreshCw, Archive, AlertTriangle, CheckCircle2, Plus, HelpCircle } from 'lucide-react';
+import { Smartphone, RefreshCw, Archive, AlertTriangle, CheckCircle2, HelpCircle, XCircle } from 'lucide-react';
 
 interface Props {
   config: InteractiveState;
@@ -8,64 +9,141 @@ interface Props {
 }
 
 const InteractiveConfigLab: React.FC<Props> = ({ config, onComplete }) => {
-  const [count, setCount] = useState(0);
-  const [isLandscape, setIsLandscape] = useState(false);
+  const [quizAnswer, setQuizAnswer] = useState<'A' | 'B' | 'C' | null>(null);
+  const [isRotated, setIsRotated] = useState(false);
+  const [countNormal, setCountNormal] = useState(0);
+  const [countSaved, setCountSaved] = useState(0);
   const [activityStatus, setActivityStatus] = useState<'ALIVE' | 'DESTROYED' | 'RECREATED'>('ALIVE');
-  const [completed, setCompleted] = useState(false);
+  const [labCompleted, setLabCompleted] = useState(false);
 
-  const isProblemMode = config.mode === 'ROTATION_PROBLEM';
+  // === QUIZ 1: SCENARIO ===
+  if (config.mode === 'QUIZ_SCENARIO') {
+    return (
+      <div className="w-full h-full flex flex-col items-center justify-center p-4">
+         <div className="bg-white rounded-3xl p-8 shadow-xl max-w-2xl w-full border-4 border-teal-100">
+             <h3 className="text-xl font-bold text-teal-800 mb-6 flex items-center gap-2">
+                 <HelpCircle /> 营地小测验 (1/2)
+             </h3>
+             <p className="text-slate-700 mb-6 text-lg font-medium leading-relaxed">
+                 用户填写注册表单到一半，突然切换了手机的“深色模式”（导致 Activity 重建）。
+                 如果你只使用了 <code>remember {'{'} mutableStateOf("") {'}'}</code>，结果会怎样？
+             </p>
 
+             <div className="flex flex-col gap-3">
+                 <button 
+                    onClick={() => setQuizAnswer('A')}
+                    disabled={quizAnswer === 'B'}
+                    className={`p-4 rounded-xl border-2 text-left transition-all ${quizAnswer === 'A' ? 'bg-red-50 border-red-500 text-red-700' : 'border-slate-200 hover:border-teal-300'}`}
+                 >
+                     <span className="font-bold mr-2">A.</span> 姓名依然还在，用户体验良好。
+                 </button>
+                 <button 
+                    onClick={() => { setQuizAnswer('B'); setTimeout(onComplete, 2000); }}
+                    disabled={quizAnswer === 'B'}
+                    className={`p-4 rounded-xl border-2 text-left transition-all ${quizAnswer === 'B' ? 'bg-green-50 border-green-500 text-green-700 shadow-md transform scale-105' : 'border-slate-200 hover:border-teal-300'}`}
+                 >
+                     <span className="font-bold mr-2">B.</span> 姓名清空了，用户需要重新输入。
+                 </button>
+             </div>
+
+             {quizAnswer === 'A' && (
+                 <div className="mt-4 p-3 bg-red-100 text-red-800 rounded-lg text-sm flex items-center gap-2 animate-pulse">
+                     <XCircle size={16}/> 错误。remember 无法跨越 Activity 的销毁重建。
+                 </div>
+             )}
+             {quizAnswer === 'B' && (
+                 <div className="mt-4 p-3 bg-green-100 text-green-800 rounded-lg text-sm flex items-center gap-2 animate-bounce">
+                     <CheckCircle2 size={16}/> 正确！数据丢失了，用户会很生气。
+                 </div>
+             )}
+         </div>
+      </div>
+    );
+  }
+
+  // === QUIZ 2: TYPE SAFETY ===
+  if (config.mode === 'QUIZ_TYPE_SAFETY') {
+    return (
+      <div className="w-full h-full flex flex-col items-center justify-center p-4">
+         <div className="bg-white rounded-3xl p-8 shadow-xl max-w-2xl w-full border-4 border-teal-100">
+             <h3 className="text-xl font-bold text-teal-800 mb-6 flex items-center gap-2">
+                 <HelpCircle /> 营地小测验 (2/2)
+             </h3>
+             <p className="text-slate-700 mb-6 text-lg font-medium leading-relaxed">
+                 以下哪种代码会导致 App 崩溃 (Crash)？
+             </p>
+
+             <div className="flex flex-col gap-3">
+                 <button 
+                    onClick={() => setQuizAnswer('A')}
+                    disabled={quizAnswer === 'C'}
+                    className={`p-4 rounded-xl border-2 text-left transition-all ${quizAnswer === 'A' ? 'bg-red-50 border-red-500 text-red-700' : 'border-slate-200 hover:border-teal-300'}`}
+                 >
+                     <span className="font-bold mr-2">A.</span> <code>rememberSaveable {'{'} mutableStateOf("Alice") {'}'}</code>
+                 </button>
+                 <button 
+                    onClick={() => setQuizAnswer('B')}
+                    disabled={quizAnswer === 'C'}
+                    className={`p-4 rounded-xl border-2 text-left transition-all ${quizAnswer === 'B' ? 'bg-red-50 border-red-500 text-red-700' : 'border-slate-200 hover:border-teal-300'}`}
+                 >
+                     <span className="font-bold mr-2">B.</span> <code>rememberSaveable {'{'} mutableStateOf(25) {'}'}</code>
+                 </button>
+                 <button 
+                    onClick={() => { setQuizAnswer('C'); setTimeout(onComplete, 2500); }}
+                    disabled={quizAnswer === 'C'}
+                    className={`p-4 rounded-xl border-2 text-left transition-all ${quizAnswer === 'C' ? 'bg-green-50 border-green-500 text-green-700 shadow-md transform scale-105' : 'border-slate-200 hover:border-teal-300'}`}
+                 >
+                     <span className="font-bold mr-2">C.</span> <code>rememberSaveable {'{'} mutableStateOf(Socket()) {'}'}</code>
+                 </button>
+             </div>
+
+             {quizAnswer && quizAnswer !== 'C' && (
+                 <div className="mt-4 p-3 bg-red-100 text-red-800 rounded-lg text-sm flex items-center gap-2">
+                     <XCircle size={16}/> 错误。基本类型 (String, Int) 是可以直接保存到 Bundle 的。
+                 </div>
+             )}
+             {quizAnswer === 'C' && (
+                 <div className="mt-4 p-3 bg-green-100 text-green-800 rounded-lg text-sm flex items-center gap-2 animate-bounce">
+                     <CheckCircle2 size={16}/> 正确！Socket 不是 Parcelable，无法序列化存入 Bundle，会导致 Crash。
+                 </div>
+             )}
+         </div>
+      </div>
+    );
+  }
+
+  // === COMPARISON LAB ===
   const handleRotate = () => {
-    // 1. Simulate Destroy
+    // 1. Destroy Phase
     setActivityStatus('DESTROYED');
-    
     setTimeout(() => {
-        // 2. Recreate
-        setIsLandscape(prev => !prev);
+        // 2. Recreate Phase
+        setIsRotated(prev => !prev);
         setActivityStatus('RECREATED');
         
-        // LOGIC: Data Loss vs Persistence
-        if (isProblemMode) {
-            setCount(0); // Lost!
-        } else {
-            // Count preserved!
-        }
+        // LOGIC: remember dies, rememberSaveable lives
+        setCountNormal(0);
+        // countSaved stays the same
 
-        // Check for success condition
-        if (count > 0) { // Only finish if we actually had some pinecones to test with
-             if (isProblemMode) {
-                 setCompleted(true);
-                 setTimeout(onComplete, 2500); // Give user time to read the failure message
-             } else {
-                 setCompleted(true);
-                 setTimeout(onComplete, 2500);
-             }
+        if (countSaved > 0) {
+            setLabCompleted(true);
+            setTimeout(onComplete, 2000);
         }
     }, 800);
-  };
-
-  const handleAdd = () => {
-      setCount(prev => prev + 1);
   };
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-start p-2 gap-6 overflow-y-auto pb-32 custom-scrollbar">
        
-       {/* Instruction Banner */}
-       <div className={`px-6 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2 ${completed ? 'bg-green-100 text-green-700' : 'bg-white text-slate-600'}`}>
-           {!completed && (
-               <>
-                 <span className="bg-slate-200 px-2 rounded text-slate-800">1</span> 添加松果
-                 <span className="text-slate-300">→</span>
-                 <span className="bg-slate-200 px-2 rounded text-slate-800">2</span> 旋转屏幕
-               </>
-           )}
-           {completed && <span>测试完成！继续剧情 👉</span>}
+       {/* Instruction */}
+       <div className="bg-teal-50 text-teal-800 px-6 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2">
+           <span className="bg-white px-2 rounded-full text-xs border border-teal-200">任务</span>
+           把两个计数器都点到 5 以上，然后点击“旋转屏幕”。
        </div>
 
        {/* Phone Simulator */}
        <div className={`relative transition-all duration-700 ease-in-out shrink-0
-           ${isLandscape ? 'w-[400px] h-[200px]' : 'w-[220px] h-[400px]'}
+           ${isRotated ? 'w-[450px] h-[220px]' : 'w-[280px] h-[450px]'}
        `}>
            {/* Phone Frame */}
            <div className={`
@@ -73,118 +151,73 @@ const InteractiveConfigLab: React.FC<Props> = ({ config, onComplete }) => {
                 ${activityStatus === 'DESTROYED' ? 'scale-90 opacity-0 blur-sm' : 'scale-100 opacity-100 blur-0'}
                 transition-all duration-500
            `}>
-               {/* Status Bar */}
-               <div className="w-full h-6 bg-slate-900 flex justify-between items-center px-4">
-                   <div className="text-[8px] text-white">12:00</div>
-                   <div className="flex gap-1">
-                       <div className="w-2 h-2 bg-white rounded-full"></div>
-                       <div className="w-2 h-2 bg-white rounded-full opacity-50"></div>
-                   </div>
-               </div>
-
-               {/* App Content */}
-               <div className="flex-1 bg-[#E0F2F1] relative flex flex-col items-center justify-center p-4">
-                   
-                   {/* Android Activity Label */}
-                   <div className="absolute top-2 left-2 text-[8px] font-mono text-teal-800/50 bg-teal-100 px-1 rounded">
-                       MainActivity.kt
+               {/* Screen Content */}
+               <div className="flex-1 bg-slate-50 relative flex flex-col p-4 overflow-y-auto">
+                   <div className="text-center mb-4">
+                       <h3 className="font-bold text-slate-700">Counter App</h3>
+                       <div className="text-[10px] text-slate-400 font-mono">Process ID: {activityStatus === 'RECREATED' ? '9021 (New)' : '4532'}</div>
                    </div>
 
-                   <h3 className="font-bold text-teal-900 mb-4 flex items-center gap-2">
-                       🌲 Pinecone Tracker
-                   </h3>
+                   <div className={`flex gap-4 ${isRotated ? 'flex-row' : 'flex-col'}`}>
+                       
+                       {/* Counter 1: Normal */}
+                       <div className="flex-1 bg-red-50 border-2 border-red-100 rounded-xl p-3 flex flex-col items-center gap-2">
+                           <span className="text-[10px] font-bold text-red-400 uppercase tracking-wider">remember</span>
+                           <span className="text-3xl font-black text-slate-700">{countNormal}</span>
+                           <button 
+                               onClick={() => setCountNormal(n => n + 1)}
+                               className="w-full py-2 bg-white border border-red-200 rounded-lg text-red-500 font-bold hover:bg-red-50 active:scale-95 text-xs"
+                           >
+                               +1 (RAM)
+                           </button>
+                       </div>
 
-                   <div className="text-5xl font-black text-teal-700 mb-6 drop-shadow-sm">
-                       {count}
+                       {/* Counter 2: Saveable */}
+                       <div className="flex-1 bg-green-50 border-2 border-green-100 rounded-xl p-3 flex flex-col items-center gap-2">
+                           <span className="text-[10px] font-bold text-green-500 uppercase tracking-wider">rememberSaveable</span>
+                           <span className="text-3xl font-black text-slate-700">{countSaved}</span>
+                           <button 
+                               onClick={() => setCountSaved(n => n + 1)}
+                               className="w-full py-2 bg-white border border-green-200 rounded-lg text-green-600 font-bold hover:bg-green-50 active:scale-95 text-xs"
+                           >
+                               +1 (Bundle)
+                           </button>
+                       </div>
                    </div>
-
-                   <button 
-                     onClick={handleAdd}
-                     className="bg-teal-600 hover:bg-teal-500 active:scale-95 text-white p-4 rounded-full shadow-lg transition-transform"
-                   >
-                       <Plus size={24} />
-                   </button>
                </div>
            </div>
 
-           {/* Rotate Action Button (Outside Phone) */}
+           {/* Rotate Button */}
            <button 
              onClick={handleRotate}
-             className="absolute -right-20 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-lg border-2 border-slate-100 text-slate-600 hover:text-teal-600 hover:rotate-180 transition-all duration-500 z-20 group"
-             title="Rotate Screen"
+             className="absolute -right-16 top-1/2 -translate-y-1/2 bg-teal-600 p-4 rounded-full shadow-xl text-white hover:bg-teal-500 hover:rotate-180 transition-all duration-500 z-20"
            >
                <RefreshCw size={24} />
-               <span className="absolute left-full ml-2 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity">
-                   旋转屏幕
-               </span>
            </button>
        </div>
 
-       {/* System Log / Feedback */}
-       <div className={`w-full max-w-xl rounded-2xl border-l-8 p-5 shadow-md flex flex-col gap-4 transition-all shrink-0
-           ${activityStatus === 'RECREATED' 
-                ? (isProblemMode && count === 0 ? 'bg-red-50 border-red-400' : 'bg-green-50 border-green-500')
-                : 'bg-white border-slate-200'
-           }
-       `}>
-           <div className="flex gap-4">
-               <div className="shrink-0 pt-1">
-                   {activityStatus === 'RECREATED' 
-                      ? (isProblemMode && count === 0 ? <AlertTriangle className="text-red-400" /> : <CheckCircle2 className="text-green-600" />)
-                      : <Smartphone className="text-slate-400" />
-                   }
-               </div>
-               
-               <div className="flex-1">
-                   <h4 className="font-bold text-slate-800 mb-1">
-                       System Status: {activityStatus}
-                   </h4>
-                   
-                   {activityStatus === 'RECREATED' && (
-                       <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-                           <p className={`text-sm mb-2 font-medium ${isProblemMode && count === 0 ? 'text-red-600' : 'text-green-600'}`}>
-                               {isProblemMode && count === 0 
-                                    ? "Activity 重建！内存中的 `remember` 丢失！Count 归零。"
-                                    : "Activity 重建！从 `SavedStateHandle` 恢复数据！Count 保持不变。"
-                               }
-                           </p>
-                           {!isProblemMode && (
-                               <div className="flex items-center gap-2 text-xs bg-green-100 text-green-800 px-3 py-2 rounded-lg border border-green-200">
-                                   <Archive size={14} />
-                                   <span>Bundle Restored: {`{ "count": ${count} }`}</span>
-                               </div>
-                           )}
-                       </div>
-                   )}
-
-                   {activityStatus === 'ALIVE' && (
-                       <p className="text-slate-500 text-sm">
-                           Activity 运行正常。数据暂时存储在 RAM 中。
-                       </p>
-                   )}
-               </div>
+       {/* Comparison Feedback */}
+       <div className={`w-full max-w-xl rounded-2xl border-l-8 p-5 shadow-md flex flex-col gap-2 transition-all shrink-0 bg-white border-slate-200`}>
+           <div className="flex items-center gap-2 mb-2">
+               <Archive size={18} className="text-teal-600"/>
+               <h4 className="font-bold text-slate-700">状态快照 / State Snapshot</h4>
            </div>
            
-           {/* BEGINNER EXPLANATION CARD */}
-           {activityStatus === 'RECREATED' && (
-                <div className="mt-1 bg-white/60 p-3 rounded-xl border border-slate-200/50 text-xs md:text-sm text-slate-700 leading-relaxed animate-in fade-in duration-700">
-                    <h5 className="font-bold flex items-center gap-1 mb-1 text-slate-800">
-                        <HelpCircle size={14} className="text-teal-600"/> 
-                        🔰 它是怎么工作的？
-                    </h5>
-                    {isProblemMode ? (
-                        <span>
-                            想象 <code>remember</code> 就像<b>金鱼的记忆</b> 🐟。数据存在运行内存 (RAM) 里。
-                            当屏幕旋转时，旧的“手机”(Activity) 被系统销毁（就像断电一样），内存被清空，所以数据就丢了。
-                        </span>
-                    ) : (
-                        <span>
-                            想象 <code>rememberSaveable</code> 就像一个<b>坚固的保险箱</b> 🔐。
-                            它会自动把数据打包存进系统的硬盘 (Bundle) 里。
-                            即使旧的“手机”被销毁，新创建的“手机”会立刻收到这个保险箱，数据完好无损！
-                        </span>
-                    )}
+           <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+                <div className={`${activityStatus === 'RECREATED' && countNormal === 0 ? 'text-red-600 font-bold' : 'text-slate-500'}`}>
+                    Normal: {countNormal}
+                    {activityStatus === 'RECREATED' && countNormal === 0 && " (LOST)"}
                 </div>
+                <div className={`${activityStatus === 'RECREATED' && countSaved > 0 ? 'text-green-600 font-bold' : 'text-slate-500'}`}>
+                    Saved: {countSaved}
+                    {activityStatus === 'RECREATED' && countSaved > 0 && " (RESTORED)"}
+                </div>
+           </div>
+
+           {labCompleted && (
+               <div className="mt-2 bg-teal-50 text-teal-800 p-3 rounded-lg text-sm font-medium animate-pulse">
+                   🎉 实验成功！普通变量归零了，但 Saveable 的数据活下来了！
+               </div>
            )}
        </div>
 

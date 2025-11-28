@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { ScriptStep } from './types';
 import InteractiveConfigLab from './InteractiveConfigLab';
-import { Image as ImageIcon, Wind, CheckCircle, ShieldCheck, BookOpen } from 'lucide-react';
+import { Image as ImageIcon, Wind, ShieldCheck, BookOpen } from 'lucide-react';
 
 interface Props {
   step: ScriptStep;
@@ -38,7 +39,7 @@ const StageLayer: React.FC<Props> = ({ step, onInteractiveComplete }) => {
                         <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
                         <div className="w-3 h-3 rounded-full bg-green-400"></div>
                     </div>
-                    <span className="text-xs text-slate-400 ml-3 font-mono font-bold tracking-wider">RotationSafe.kt</span>
+                    <span className="text-xs text-slate-400 ml-3 font-mono font-bold tracking-wider">ConfigChanges.kt</span>
                 </div>
             </div>
             <div className="overflow-auto p-6 custom-scrollbar bg-[#0f172a]">
@@ -62,9 +63,9 @@ const StageLayer: React.FC<Props> = ({ step, onInteractiveComplete }) => {
          return (
              <div className="text-center flex flex-col items-center p-8 bg-white/60 backdrop-blur-md rounded-[3rem] shadow-2xl border-4 border-white animate-in zoom-in duration-500 max-w-2xl w-full">
                  <ShieldCheck size={80} className="text-teal-600 mb-4 drop-shadow-xl" />
-                 <h1 className="text-4xl font-black text-teal-800 mb-2 tracking-tight">Data Saved!</h1>
+                 <h1 className="text-4xl font-black text-teal-800 mb-2 tracking-tight">Mission Complete!</h1>
                  <p className="text-lg text-teal-700 font-bold mb-6">
-                    无论风吹雨打（屏幕旋转），你的松果都安全了！
+                    你已经掌握了如何在“狂风”中保护数据！
                  </p>
                  
                  {/* Learning Summary Card */}
@@ -75,15 +76,15 @@ const StageLayer: React.FC<Props> = ({ step, onInteractiveComplete }) => {
                     <ul className="space-y-3 text-slate-600 text-sm">
                         <li className="flex gap-3 items-start">
                             <span className="bg-teal-100 text-teal-700 font-bold px-2 py-0.5 rounded text-xs mt-0.5 shrink-0">Concept</span>
-                            <span><b>配置变更 (Config Change)</b>：屏幕旋转、切换语言等操作，会导致系统销毁当前 Activity 并重建一个新的。</span>
+                            <span><b>Slot Table vs Bundle</b>: remember 存内存 (Activity 死则死)，rememberSaveable 存硬盘/Bundle (Activity 死则生)。</span>
                         </li>
                         <li className="flex gap-3 items-start">
-                            <span className="bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded text-xs mt-0.5 shrink-0">Trap</span>
-                            <span><b>remember</b>：只能跨越“重组”保存数据，无法跨越“销毁”。</span>
+                            <span className="bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded text-xs mt-0.5 shrink-0">Limit</span>
+                            <span><b>存储限制</b>: Bundle 只能存基本类型和 Parcelable。复杂对象需要转换。</span>
                         </li>
                         <li className="flex gap-3 items-start">
-                            <span className="bg-green-100 text-green-700 font-bold px-2 py-0.5 rounded text-xs mt-0.5 shrink-0">Solution</span>
-                            <span><b>rememberSaveable</b>：将数据序列化保存到 Bundle (SavedStateHandle) 中，专门用于抵御销毁重建。</span>
+                            <span className="bg-green-100 text-green-700 font-bold px-2 py-0.5 rounded text-xs mt-0.5 shrink-0">Action</span>
+                            <span><b>最佳实践</b>: 用户输入的表单、滚动位置、Tab 选择，统统用 rememberSaveable。</span>
                         </li>
                     </ul>
                  </div>
