@@ -19,9 +19,13 @@ import GameEngineDerived from './components/4.2.2/GameEngine';
 import GameEngineViewModel from './components/4.3.1/GameEngine';
 import GameEngineStateModel from './components/4.3.2/GameEngine';
 import GameEngineEvent from './components/4.3.3/GameEngine';
+import GameEngineNav from './components/5.1.1/GameEngine';
+import GameEngineArgs from './components/5.1.2/GameEngine';
+import GameEngineOptions from './components/5.1.3/GameEngine';
+import GameEngineAnimSimple from './components/5.2.1/GameEngine';
 import Lobby from './components/Lobby';
 
-type View = 'LOBBY' | '4.1.1' | '4.1.2' | '4.1.3' | '4.2.1' | '4.2.2' | '4.3.1' | '4.3.2' | '4.3.3' | '2.4.2' | '2.3.1' | '2.3.2' | '3.1.1' | '3.1.2' | '3.1.3' | '3.2.1' | '3.2.2' | '3.3.1' | '3.3.2' | '3.3.3';
+type View = 'LOBBY' | '4.1.1' | '4.1.2' | '4.1.3' | '4.2.1' | '4.2.2' | '4.3.1' | '4.3.2' | '4.3.3' | '5.1.1' | '5.1.2' | '5.1.3' | '5.2.1' | '2.4.2' | '2.3.1' | '2.3.2' | '3.1.1' | '3.1.2' | '3.1.3' | '3.2.1' | '3.2.2' | '3.3.1' | '3.3.2' | '3.3.3';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('LOBBY');
@@ -74,6 +78,30 @@ const App: React.FC = () => {
         return (
           <div className="w-full h-screen relative overflow-hidden bg-[#FEF2F2] text-slate-800 selection:bg-red-300 selection:text-red-900">
             <GameEngineEvent onBack={() => setCurrentView('LOBBY')} />
+          </div>
+        );
+      case '5.1.1':
+        return (
+          <div className="w-full h-screen relative overflow-hidden bg-[#FFF1F2] text-slate-800 selection:bg-rose-300 selection:text-rose-900">
+            <GameEngineNav onBack={() => setCurrentView('LOBBY')} />
+          </div>
+        );
+      case '5.1.2':
+        return (
+          <div className="w-full h-screen relative overflow-hidden bg-[#F0F9FF] text-slate-800 selection:bg-sky-300 selection:text-sky-900">
+            <GameEngineArgs onBack={() => setCurrentView('LOBBY')} />
+          </div>
+        );
+      case '5.1.3':
+        return (
+          <div className="w-full h-screen relative overflow-hidden bg-[#FEFCE8] text-slate-800 selection:bg-yellow-300 selection:text-yellow-900">
+            <GameEngineOptions onBack={() => setCurrentView('LOBBY')} />
+          </div>
+        );
+      case '5.2.1':
+        return (
+          <div className="w-full h-screen relative overflow-hidden bg-[#FDF4FF] text-slate-800 selection:bg-fuchsia-300 selection:text-fuchsia-900">
+            <GameEngineAnimSimple onBack={() => setCurrentView('LOBBY')} />
           </div>
         );
       case '2.4.2':

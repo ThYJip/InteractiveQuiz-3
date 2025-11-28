@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick, Image as ImageIcon, Wind, Gamepad2, Recycle, Filter, Box, Database, Send } from 'lucide-react';
+import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick, Image as ImageIcon, Wind, Gamepad2, Recycle, Filter, Box, Database, Send, MapPin, Package, RotateCcw, Move } from 'lucide-react';
 
 interface Props {
   onSelectLesson: (lessonId: string) => void;
@@ -23,6 +23,110 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl w-full">
           
+          {/* Card 5.2.1: Simple Animation (Fuchsia/Magic Theme) */}
+          <button 
+            onClick={() => onSelectLesson('5.2.1')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-fuchsia-100 hover:border-fuchsia-300 overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-fuchsia-100 rounded-full blur-2xl group-hover:bg-fuchsia-200 transition-colors opacity-60"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-fuchsia-100 rounded-2xl flex items-center justify-center mb-6 text-fuchsia-600 group-hover:scale-110 transition-transform duration-500">
+                <Move size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-fuchsia-700 transition-colors">
+                5.2.1 简单值动画
+              </h2>
+              <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+                让状态平滑流动！使用 animate*AsState 实现“发射后不管”的渐变效果，理解 tween 与 spring 的区别。
+              </p>
+              
+              <div className="flex items-center gap-2 text-fuchsia-600 font-bold text-sm">
+                <Sparkles size={16} />
+                <span>动画魔法 (Cozy Camp)</span>
+              </div>
+            </div>
+          </button>
+
+          {/* Card 5.1.3: Nav Options (Yellow/Map Theme) */}
+          <button 
+            onClick={() => onSelectLesson('5.1.3')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-yellow-100 hover:border-yellow-300 overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-yellow-100 rounded-full blur-2xl group-hover:bg-yellow-200 transition-colors opacity-60"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mb-6 text-yellow-600 group-hover:scale-110 transition-transform duration-500">
+                <RotateCcw size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-yellow-700 transition-colors">
+                5.1.3 导航选项与清理
+              </h2>
+              <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+                别让回退栈变成迷宫！使用 popUpTo 清理路径，launchSingleTop 避免分身，saveState 保存记忆。
+              </p>
+              
+              <div className="flex items-center gap-2 text-yellow-600 font-bold text-sm">
+                <Sparkles size={16} />
+                <span>核心导航 (Cozy Camp)</span>
+              </div>
+            </div>
+          </button>
+
+          {/* Card 5.1.2: Nav Args (Sky/Package Theme) */}
+          <button 
+            onClick={() => onSelectLesson('5.1.2')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-sky-100 hover:border-sky-300 overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-sky-100 rounded-full blur-2xl group-hover:bg-sky-200 transition-colors opacity-60"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-sky-100 rounded-2xl flex items-center justify-center mb-6 text-sky-600 group-hover:scale-110 transition-transform duration-500">
+                <Package size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-sky-700 transition-colors">
+                5.1.2 路由参数传递
+              </h2>
+              <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+                像快递员一样精准投递！区分路径参数（必选地址）与查询参数（可选备注），拒绝“空地址”崩溃。
+              </p>
+              
+              <div className="flex items-center gap-2 text-sky-600 font-bold text-sm">
+                <Sparkles size={16} />
+                <span>核心导航 (Cozy Camp)</span>
+              </div>
+            </div>
+          </button>
+
+          {/* Card 5.1.1: Navigation Basics (Rose/Map Theme) */}
+          <button 
+            onClick={() => onSelectLesson('5.1.1')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-rose-100 hover:border-rose-300 overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-rose-100 rounded-full blur-2xl group-hover:bg-rose-200 transition-colors opacity-60"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-rose-100 rounded-2xl flex items-center justify-center mb-6 text-rose-600 group-hover:scale-110 transition-transform duration-500">
+                <MapPin size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-rose-700 transition-colors">
+                5.1.1 导航图配置
+              </h2>
+              <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+                欢迎来到“单 Activity”剧场！学习如何搭建 NavHost 舞台，并使用 NavController 导演转场。
+              </p>
+              
+              <div className="flex items-center gap-2 text-rose-600 font-bold text-sm">
+                <Sparkles size={16} />
+                <span>核心导航 (Cozy Camp)</span>
+              </div>
+            </div>
+          </button>
+
           {/* Card 4.3.3: Event Handling (Red/Relay) */}
           <button 
             onClick={() => onSelectLesson('4.3.3')}
