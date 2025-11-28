@@ -17,9 +17,10 @@ import GameEngineCleanup from './components/4.1.3/GameEngine';
 import GameEngineManual from './components/4.2.1/GameEngine';
 import GameEngineDerived from './components/4.2.2/GameEngine';
 import GameEngineViewModel from './components/4.3.1/GameEngine';
+import GameEngineStateModel from './components/4.3.2/GameEngine';
 import Lobby from './components/Lobby';
 
-type View = 'LOBBY' | '4.1.1' | '4.1.2' | '4.1.3' | '4.2.1' | '4.2.2' | '4.3.1' | '2.4.2' | '2.3.1' | '2.3.2' | '3.1.1' | '3.1.2' | '3.1.3' | '3.2.1' | '3.2.2' | '3.3.1' | '3.3.2' | '3.3.3';
+type View = 'LOBBY' | '4.1.1' | '4.1.2' | '4.1.3' | '4.2.1' | '4.2.2' | '4.3.1' | '4.3.2' | '2.4.2' | '2.3.1' | '2.3.2' | '3.1.1' | '3.1.2' | '3.1.3' | '3.2.1' | '3.2.2' | '3.3.1' | '3.3.2' | '3.3.3';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('LOBBY');
@@ -60,6 +61,12 @@ const App: React.FC = () => {
         return (
           <div className="w-full h-screen relative overflow-hidden bg-[#FFF7ED] text-slate-800 selection:bg-orange-300 selection:text-orange-900">
             <GameEngineViewModel onBack={() => setCurrentView('LOBBY')} />
+          </div>
+        );
+      case '4.3.2':
+        return (
+          <div className="w-full h-screen relative overflow-hidden bg-[#F5F3FF] text-slate-800 selection:bg-violet-300 selection:text-violet-900">
+            <GameEngineStateModel onBack={() => setCurrentView('LOBBY')} />
           </div>
         );
       case '2.4.2':

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick, Image as ImageIcon, Wind, Gamepad2, Recycle, Filter, Box } from 'lucide-react';
+import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick, Image as ImageIcon, Wind, Gamepad2, Recycle, Filter, Box, Database } from 'lucide-react';
 
 interface Props {
   onSelectLesson: (lessonId: string) => void;
@@ -23,6 +23,32 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl w-full">
           
+          {/* Card 4.3.2: State Modeling (Violet/Vending Machine) */}
+          <button 
+            onClick={() => onSelectLesson('4.3.2')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-violet-100 hover:border-violet-300 overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-violet-100 rounded-full blur-2xl group-hover:bg-violet-200 transition-colors opacity-60"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-violet-100 rounded-2xl flex items-center justify-center mb-6 text-violet-600 group-hover:scale-110 transition-transform duration-500">
+                <Database size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-violet-700 transition-colors">
+                4.3.2 界面状态建模
+              </h2>
+              <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+                告别混乱的状态！使用 Sealed Interface 像自动贩卖机一样管理 UI 状态，拒绝无效组合。
+              </p>
+              
+              <div className="flex items-center gap-2 text-violet-600 font-bold text-sm">
+                <Sparkles size={16} />
+                <span>架构进阶 (Cozy Camp)</span>
+              </div>
+            </div>
+          </button>
+
           {/* Card 4.3.1: ViewModel (Orange/Cabin) */}
           <button 
             onClick={() => onSelectLesson('4.3.1')}
