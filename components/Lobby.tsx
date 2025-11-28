@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate } from 'lucide-react';
+import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer } from 'lucide-react';
 
 interface Props {
   onSelectLesson: (lessonId: string) => void;
@@ -226,6 +226,32 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
               <div className="flex items-center gap-2 text-purple-600 font-bold text-sm">
                 <Layers size={16} />
                 <span>UI 模式 (Cozy Camp)</span>
+              </div>
+            </div>
+          </button>
+
+          {/* Card 9: Scaffold (Blue/Construction Theme) */}
+          <button 
+            onClick={() => onSelectLesson('3.2.2')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-blue-100 hover:border-blue-300 overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-100 rounded-full blur-2xl group-hover:bg-blue-200 transition-colors opacity-60"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 text-blue-600 group-hover:scale-110 transition-transform duration-500">
+                <Hammer size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">
+                3.2.2 Scaffold 脚手架
+              </h2>
+              <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+                告别手搭骨架！拥抱标准化的页面结构。千万别忘了 PaddingValues 的契约！
+              </p>
+              
+              <div className="flex items-center gap-2 text-blue-600 font-bold text-sm">
+                <LayoutTemplate size={16} />
+                <span>页面布局 (Cozy Camp)</span>
               </div>
             </div>
           </button>
