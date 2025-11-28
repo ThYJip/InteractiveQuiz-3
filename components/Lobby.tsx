@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio } from 'lucide-react';
+import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate } from 'lucide-react';
 
 interface Props {
   onSelectLesson: (lessonId: string) => void;
@@ -200,6 +200,32 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
               <div className="flex items-center gap-2 text-teal-600 font-bold text-sm">
                 <List size={16} />
                 <span>进阶列表 (Cozy Camp)</span>
+              </div>
+            </div>
+          </button>
+
+          {/* Card 8: Slot API (Purple/Bento Theme) */}
+          <button 
+            onClick={() => onSelectLesson('3.2.1')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-purple-100 hover:border-purple-300 overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-100 rounded-full blur-2xl group-hover:bg-purple-200 transition-colors opacity-60"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6 text-purple-600 group-hover:scale-110 transition-transform duration-500">
+                <LayoutTemplate size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-purple-700 transition-colors">
+                3.2.1 插槽 API 模式
+              </h2>
+              <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+                拒绝死板的便当盒！学习使用 Slot API 构建高复用、灵活的组件。
+              </p>
+              
+              <div className="flex items-center gap-2 text-purple-600 font-bold text-sm">
+                <Layers size={16} />
+                <span>UI 模式 (Cozy Camp)</span>
               </div>
             </div>
           </button>
