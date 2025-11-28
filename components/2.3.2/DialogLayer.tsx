@@ -68,6 +68,10 @@ const DialogLayer: React.FC<Props> = ({ speaker, text, onNext, canProceed, isLas
 
   const config = getSpeakerConfig();
 
+  // Special Check: Don't show "Next" if it's the AI assignment (Act 7/9 depending on script index) 
+  // We can infer this if canProceed is false, but sometimes canProceed is true for text.
+  // Actually, InteractiveLab handles the auto-advance, so we should rely on `canProceed` passed from GameEngine.
+
   return (
     <div className="fixed bottom-6 left-4 right-4 z-50 flex justify-center pointer-events-none">
       <div className="relative w-full max-w-4xl bg-white rounded-[2rem] p-8 pb-10 shadow-[0_20px_50px_-12px_rgba(220,252,231,1)] border border-green-100 pointer-events-auto">
@@ -78,7 +82,7 @@ const DialogLayer: React.FC<Props> = ({ speaker, text, onNext, canProceed, isLas
           <span className={`font-bold ${config.text} tracking-wider`}>{config.name}</span>
         </div>
 
-        {/* Corner Brackets (Green/Wood) */}
+        {/* Corner Brackets */}
         <div className="absolute top-4 left-4 w-6 h-6 border-t-4 border-l-4 border-green-300 rounded-tl-xl opacity-60" />
         <div className="absolute top-4 right-4 w-6 h-6 border-t-4 border-r-4 border-green-300 rounded-tr-xl opacity-60" />
         <div className="absolute bottom-4 left-4 w-6 h-6 border-b-4 border-l-4 border-green-300 rounded-bl-xl opacity-60" />

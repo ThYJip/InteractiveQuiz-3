@@ -1,11 +1,12 @@
 
 export type Speaker = "Chi" | "Rin" | "Nadeshiko" | "Sensei";
 
-export type ViewType = "IMAGE" | "CODE_EXPLAIN" | "INTERACTIVE_LAB" | "VICTORY";
+export type ViewType = "IMAGE" | "CODE_EXPLAIN" | "INTERACTIVE_LAB" | "TECH_SUMMARY" | "VICTORY";
 
 export interface InteractiveState {
-    mode: 'PHOTO_CRISIS' | 'QUIZ' | 'CODE_CHALLENGE' | 'BACKPACK_FIX'; 
-    targetAction?: 'ROTATE_AND_OBSERVE';
+    mode: 'PHOTO_CRISIS' | 'QUIZ' | 'CODE_CHALLENGE' | 'BACKPACK_FIX' | 'GUIDED_TYPING' | 'OPEN_ASSIGNMENT'; 
+    targetCode?: string; // For guided typing
+    assignmentPrompt?: string; // For AI assignment
 }
 
 export interface ScriptStep {
