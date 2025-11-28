@@ -1,0 +1,365 @@
+
+import React, { useState, useEffect } from 'react';
+import { InteractiveState } from './types';
+import { Loader2, Trash2, CheckSquare, Square, Tags, AlertTriangle, CheckCircle2, Edit3, Terminal, Sparkles, Coffee, Box, LayoutList } from 'lucide-react';
+import { GoogleGenAI } from "@google/genai";
+
+interface Props {
+  config: InteractiveState;
+  onComplete: () => void;
+}
+
+// Data models for the simulations
+interface CupItem {
+    id: number;
+    label: string;
+    checked: boolean; // "Internal State"
+}
+
+const InteractiveListLab: React.FC<Props> = ({ config, onComplete }) => {
+  const mode = config.mode;
+
+  // === LAB 1: HETERO SORT ===
+  const [sortedCount, setSortedCount] = useState(0);
+
+  // === LAB 2 & 3: STATE DRIFT (The Cup Shuffle) ===
+  // Initial state: 3 items. Item 2 is checked.
+  // We simulate "Compose Internal State" separately from "Data List"
+  // If NO KEY: internalStates[0] maps to dataList[0].
+  // If KEY: internalStates[key] maps to dataList[key].
+  
+  const [dataList, setDataList] = useState<CupItem[]>([
+      { id: 1, label: 'Cup A', checked: false },
+      { id: 2, label: 'Cup B', checked: false }, // Initially unchecked in data, but we'll interact to check it
+      { id: 3, label: 'Cup C', checked: false }
+  ]);
+  
+  // This array represents Compose's "Slot Table" - purely positional memory for LAB 2
+  const [positionalState, setPositionalState] = useState<boolean[]>([false, false, false]);
+  
+  // This map represents Key-based memory for LAB 3
+  const [keyedState, setKeyedState] = useState<Record<number, boolean>>({ 1: false, 2: false, 3: false });
+
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [bugTriggered, setBugTriggered] = useState(false);
+  const [fixVerified, setFixVerified] = useState(false);
+
+
+  // === LAB 4: QUIZ ===
+  const [quizChoice, setQuizChoice] = useState<string | null>(null);
+
+  // === LAB 5: TYPING ===
+  const [typedCode, setTypedCode] = useState("");
+  const [isTypedCorrect, setIsTypedCorrect] = useState(false);
+
+  // === LAB 6: AI ASSIGNMENT ===
+  const [userCode, setUserCode] = useState("LazyColumn {\n  items(messages) { msg ->\n    MessageRow(msg)\n  }\n}");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiFeedback, setAiFeedback] = useState<{pass: boolean, msg: string} | null>(null);
+
+
+  // --- LOGIC: HETERO VISUALIZER ---
+  const handleSort = () => {
+      setSortedCount(prev => prev + 1);
+      if (sortedCount > 2) setTimeout(onComplete, 1000);
+  }
+
+  // --- LOGIC: STATE DRIFT (BUG) ---
+  const toggleCheckPosition = (index: number) => {
+      setHasInteracted(true);
+      setPositionalState(prev => {
+          const n = [...prev];
+          n[index] = !n[index];
+          return n;
+      });
+  };
+
+  const handleDeleteItemBug = (indexToDelete: number) => {
+      // 1. Update Data: Remove item at index
+      setDataList(prev => prev.filter((_, i) => i !== indexToDelete));
+      // 2. Compose Behavior (NO KEY): It sees list length shrink by 1.
+      // It keeps the first N-1 state slots.
+      // So if we delete index 0, slot 0 and 1 remain. Slot 2 is dropped.
+      setPositionalState(prev => prev.slice(0, prev.length - 1));
+      
+      setBugTriggered(true);
+      setTimeout(onComplete, 4000); // Give time to observe the bug
+  };
+
+
+  // --- LOGIC: KEY FIX ---
+  const toggleCheckKey = (id: number) => {
+      setHasInteracted(true);
+      setKeyedState(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleDeleteItemKey = (idToDelete: number) => {
+      setDataList(prev => prev.filter(item => item.id !== idToDelete));
+      // Keyed state doesn't need manual slicing, it just persists for remaining keys
+      setFixVerified(true);
+      setTimeout(onComplete, 3000);
+  };
+
+
+  // --- LOGIC: QUIZ ---
+  const handleQuiz = (choice: string) => {
+      setQuizChoice(choice);
+      if (choice === 'POSITION') {
+          setTimeout(onComplete, 1500);
+      }
+  };
+
+
+  // --- LOGIC: TYPING ---
+  const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const input = e.target.value;
+      setTypedCode(input);
+      const normalize = (s: string) => s.replace(/\s+/g, ' ').trim();
+      if (config.targetCode && normalize(input) === normalize(config.targetCode)) {
+          setIsTypedCorrect(true);
+          setTimeout(onComplete, 1500);
+      }
+  };
+
+
+  // --- LOGIC: AI ---
+  const checkCodeWithAI = async () => {
+      setAiLoading(true);
+      setAiFeedback(null);
+      try {
+          const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+          const response = await ai.models.generateContent({
+             model: 'gemini-2.5-flash',
+             contents: `
+                You are Rin Shima. Task: ${config.assignmentPrompt}.
+                User Code: "${userCode}".
+                Check if 'key' is used in items/itemsIndexed.
+                Respond JSON: { "pass": boolean, "message": "string (Rin persona, Chinese)" }.
+             `,
+             config: { responseMimeType: "application/json" }
+          });
+          const result = JSON.parse(response.text || "{}");
+          setAiFeedback({ pass: result.pass, msg: result.message });
+          if (result.pass) setTimeout(onComplete, 3000);
+      } catch (error) {
+          console.error(error);
+          setAiFeedback({ pass: false, msg: "AI 信号不佳，算你通过！(模拟)" });
+          setTimeout(onComplete, 2000);
+      } finally {
+          setAiLoading(false);
+      }
+  };
+
+
+  // === RENDER ===
+
+  if (mode === 'HETERO_VISUALIZER') {
+      return (
+          <div className="w-full h-full flex flex-col items-center justify-center p-4 gap-6">
+              <div className="bg-white/80 px-6 py-2 rounded-full font-bold text-indigo-900 border border-indigo-200">
+                  点击物品，将它们归类到正确的 UI 样式中
+              </div>
+              <div className="flex gap-4">
+                  {['Food', 'Gear', 'Food', 'Gear'].map((type, i) => (
+                      <button 
+                         key={i} 
+                         onClick={handleSort}
+                         className="w-20 h-20 bg-white rounded-xl shadow-md flex flex-col items-center justify-center gap-2 hover:scale-110 transition-transform active:scale-90"
+                      >
+                          {type === 'Food' ? <Coffee className="text-amber-500"/> : <Box className="text-blue-500"/>}
+                          <span className="text-xs font-mono">{type}</span>
+                      </button>
+                  ))}
+              </div>
+              
+              <div className="w-full max-w-md bg-indigo-50 rounded-2xl p-4 border-2 border-indigo-100 min-h-[150px] flex flex-col gap-2 transition-all">
+                  <div className="text-xs text-indigo-400 font-bold uppercase tracking-wider mb-2">LazyColumn Rendering...</div>
+                  {Array.from({length: sortedCount}).map((_, i) => (
+                      <div key={i} className="animate-slide-in-right">
+                          {i % 2 === 0 
+                            ? <div className="bg-amber-100 p-2 rounded text-amber-800 text-xs font-bold flex items-center gap-2"><Coffee size={14}/> FoodItem Composable</div>
+                            : <div className="bg-blue-100 p-2 rounded text-blue-800 text-xs font-bold flex items-center gap-2"><Box size={14}/> GearItem Composable</div>
+                          }
+                      </div>
+                  ))}
+              </div>
+          </div>
+      )
+  }
+
+  if (mode === 'STATE_DRIFT_BUG' || mode === 'KEY_FIX') {
+      const isBug = mode === 'STATE_DRIFT_BUG';
+      
+      return (
+          <div className="w-full h-full flex flex-col items-center justify-start pt-10 p-4 gap-8">
+              <div className={`px-6 py-2 rounded-full font-bold text-sm shadow-sm border flex items-center gap-2 ${isBug ? 'bg-red-50 border-red-200 text-red-800' : 'bg-green-50 border-green-200 text-green-800'}`}>
+                  {isBug ? <AlertTriangle size={16}/> : <CheckCircle2 size={16}/>}
+                  {isBug ? "任务：勾选第2个杯子(Cup B)，然后删除第1个杯子(Cup A)" : "任务：开启 Key 保护，重试上述操作"}
+              </div>
+
+              <div className="w-full max-w-sm bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
+                  <div className="bg-slate-50 p-3 border-b border-slate-200 flex justify-between items-center">
+                      <span className="font-bold text-slate-700">My Cup List</span>
+                      <span className="text-xs font-mono text-slate-400">{isBug ? "No Key" : "Keyed"}</span>
+                  </div>
+                  
+                  <div className="p-4 space-y-3">
+                      {dataList.map((item, index) => {
+                          // Determine visual checked state
+                          const isChecked = isBug ? positionalState[index] : keyedState[item.id];
+                          
+                          return (
+                              <div key={isBug ? index : item.id} className="flex items-center gap-3 p-3 bg-white border border-slate-100 rounded-xl shadow-sm transition-all animate-fade-in">
+                                  <button 
+                                    onClick={() => isBug ? toggleCheckPosition(index) : toggleCheckKey(item.id)}
+                                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${isChecked ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-300'}`}
+                                  >
+                                      {isChecked ? <CheckSquare size={18} /> : <Square size={18} />}
+                                  </button>
+                                  <div className="flex-1 font-bold text-slate-700">{item.label}</div>
+                                  <button 
+                                    onClick={() => isBug ? handleDeleteItemBug(index) : handleDeleteItemKey(item.id)}
+                                    className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                  >
+                                      <Trash2 size={18} />
+                                  </button>
+                              </div>
+                          )
+                      })}
+                      {dataList.length === 0 && <div className="text-center text-slate-400 py-4">Empty List</div>}
+                  </div>
+              </div>
+
+              {/* Visualization of the Bug/Fix */}
+              <div className="text-center max-w-md">
+                   {bugTriggered && (
+                       <div className="bg-red-100 text-red-800 p-4 rounded-xl border border-red-200 animate-bounce">
+                           <h4 className="font-bold mb-1">发生了什么？</h4>
+                           <p className="text-xs">
+                               你删除了 Cup A (位置 0)。Cup B 移动到了位置 0。
+                               但位置 0 的状态是“未选中”！
+                               Cup C 移动到了位置 1，继承了原本位置 1 的“已选中”状态！
+                               <br/><b>状态和数据错位了！</b>
+                           </p>
+                       </div>
+                   )}
+                   {fixVerified && (
+                       <div className="bg-green-100 text-green-800 p-4 rounded-xl border border-green-200 animate-pulse">
+                           <h4 className="font-bold mb-1">完美！</h4>
+                           <p className="text-xs">
+                               有了 Key，Compose 知道 Cup B 是 ID:2。
+                               即使它移动到了位置 0，它的状态依然紧紧跟随 ID:2。
+                           </p>
+                       </div>
+                   )}
+              </div>
+          </div>
+      )
+  }
+
+  if (mode === 'QUIZ') {
+      return (
+        <div className="w-full h-full flex flex-col items-center justify-center p-4">
+            <div className="bg-white/90 p-8 rounded-3xl shadow-xl border-4 border-indigo-100 max-w-lg w-full">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="bg-indigo-100 p-2 rounded-full"><LayoutList className="text-indigo-600" /></div>
+                    <h3 className="text-xl font-bold text-indigo-900">前辈的提问</h3>
+                </div>
+                <p className="text-lg text-slate-700 font-medium mb-6">
+                    在 LazyColumn 中，如果我不提供 `key` 参数，Compose 默认使用什么作为 key？
+                </p>
+                <div className="space-y-3">
+                    {['DATA_ID (数据ID)', 'POSITION (列表位置)', 'RANDOM (随机数)'].map((opt) => {
+                        const val = opt.split(' ')[0];
+                        const isSelected = quizChoice === val;
+                        const isCorrect = val === 'POSITION';
+                        
+                        let btnClass = "w-full p-4 rounded-xl border-2 text-left font-bold transition-all ";
+                        if (isSelected) {
+                            btnClass += isCorrect ? "bg-green-500 text-white border-green-600" : "bg-red-500 text-white border-red-600";
+                        } else {
+                            btnClass += "bg-white border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 text-slate-700";
+                        }
+
+                        return (
+                            <button key={val} onClick={() => handleQuiz(val)} className={btnClass} disabled={!!quizChoice}>
+                                {opt}
+                            </button>
+                        )
+                    })}
+                </div>
+                {quizChoice === 'POSITION' && (
+                    <div className="mt-4 text-green-600 font-bold animate-bounce text-center">✅ 正确！这就是为什么删除会导致状态错位。</div>
+                )}
+            </div>
+        </div>
+      )
+  }
+
+  if (mode === 'GUIDED_TYPING') {
+    return (
+        <div className="w-full h-full flex flex-col items-center justify-center p-4">
+            <div className="bg-[#EEF2FF] p-8 rounded-xl shadow-2xl max-w-2xl w-full border border-indigo-200 relative">
+                <div className="ml-8">
+                    <h3 className="text-xl font-bold text-indigo-900 mb-2 flex items-center gap-2">
+                        <Edit3 size={24} /> 露营笔记：Key 的写法
+                    </h3>
+                    <div className="bg-indigo-100 p-4 rounded-lg border border-indigo-300 mb-4 font-mono text-sm text-indigo-800 opacity-80 select-none">
+                        {config.targetCode}
+                    </div>
+                    <input 
+                      type="text" 
+                      value={typedCode}
+                      onChange={handleTyping}
+                      className={`w-full bg-transparent border-b-2 font-mono text-sm p-2 outline-none transition-colors
+                          ${isTypedCorrect ? 'border-green-500 text-green-700' : 'border-indigo-300 text-indigo-900 focus:border-indigo-600'}
+                      `}
+                      placeholder="// 抄写代码..."
+                      autoFocus
+                    />
+                    {isTypedCorrect && <p className="mt-4 text-green-600 font-bold animate-pulse">Key Memorized!</p>}
+                </div>
+            </div>
+        </div>
+      );
+  }
+
+  if (mode === 'AI_ASSIGNMENT') {
+    return (
+        <div className="w-full h-full flex flex-col items-center justify-center p-2">
+            <div className="w-full max-w-3xl bg-[#1e293b] rounded-xl shadow-2xl overflow-hidden flex flex-col h-[500px] border-4 border-slate-700">
+                <div className="bg-[#0f172a] p-3 flex items-center justify-between border-b border-slate-700">
+                    <div className="flex items-center gap-2 text-slate-300 font-mono text-sm font-bold">
+                        <Terminal size={18} /> Rin's Proving Ground
+                    </div>
+                </div>
+                <div className="bg-slate-800/50 p-4 border-b border-slate-700">
+                    <p className="text-blue-200 text-sm font-mono"><span className="text-green-400">#</span> {config.assignmentPrompt}</p>
+                </div>
+                <textarea 
+                    value={userCode}
+                    onChange={(e) => setUserCode(e.target.value)}
+                    className="flex-1 bg-[#1e293b] text-slate-100 font-mono text-sm p-4 outline-none resize-none"
+                    spellCheck={false}
+                />
+                <div className="bg-[#0f172a] p-4 flex items-center justify-between border-t border-slate-700">
+                     <div className="flex-1 mr-4">
+                        {aiFeedback && (
+                            <div className={`text-xs font-mono p-2 rounded border ${aiFeedback.pass ? 'bg-green-900/30 border-green-700 text-green-300' : 'bg-red-900/30 border-red-700 text-red-300'}`}>
+                                {aiFeedback.msg}
+                            </div>
+                        )}
+                    </div>
+                    <button onClick={checkCodeWithAI} disabled={aiLoading || aiFeedback?.pass} className="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-blue-500">
+                        {aiLoading ? <Loader2 className="animate-spin" /> : <Sparkles size={18} />} 提交
+                    </button>
+                </div>
+            </div>
+        </div>
+    )
+  }
+
+  return <div>Unknown Mode</div>;
+};
+
+export default InteractiveListLab;
