@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick, Image as ImageIcon, Wind } from 'lucide-react';
+import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick, Image as ImageIcon, Wind, Gamepad2, Recycle } from 'lucide-react';
 
 interface Props {
   onSelectLesson: (lessonId: string) => void;
@@ -49,7 +49,7 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
             </div>
           </button>
 
-          {/* Card 1: Coroutine Scopes (Cyber Theme Mapping) */}
+          {/* Card 4.1.2: Coroutine Scopes (Cyber Theme Mapping) */}
           <button 
             onClick={() => onSelectLesson('4.1.2')}
             className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-cyan-100 hover:border-cyan-300 overflow-hidden"
@@ -69,6 +69,58 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
               </p>
               
               <div className="flex items-center gap-2 text-cyan-600 font-bold text-sm">
+                <Sparkles size={16} />
+                <span>进阶并发 (Cyber Mode)</span>
+              </div>
+            </div>
+          </button>
+
+          {/* Card 4.1.3: DisposableEffect (Lime/Recycle Theme) */}
+          <button 
+            onClick={() => onSelectLesson('4.1.3')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-lime-100 hover:border-lime-300 overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-lime-100 rounded-full blur-2xl group-hover:bg-lime-200 transition-colors opacity-60"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-lime-100 rounded-2xl flex items-center justify-center mb-6 text-lime-600 group-hover:scale-110 transition-transform duration-500">
+                <Recycle size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-lime-700 transition-colors">
+                4.1.3 资源清理效应
+              </h2>
+              <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+                有借有还，再借不难！使用 DisposableEffect 优雅处理监听器的注册与注销。
+              </p>
+              
+              <div className="flex items-center gap-2 text-lime-600 font-bold text-sm">
+                <Sparkles size={16} />
+                <span>副作用管理 (Cozy Camp)</span>
+              </div>
+            </div>
+          </button>
+
+          {/* Card 4.2.1: Manual Scope (Blue/Cyber) */}
+          <button 
+            onClick={() => onSelectLesson('4.2.1')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-blue-100 hover:border-blue-300 overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-100 rounded-full blur-2xl group-hover:bg-blue-200 transition-colors opacity-60"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 text-blue-600 group-hover:scale-110 transition-transform duration-500">
+                <Gamepad2 size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">
+                4.2.1 手动挡协程
+              </h2>
+              <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+                进入协程驾驶舱！使用 rememberCoroutineScope，像玩游戏一样在回调中发射技能。
+              </p>
+              
+              <div className="flex items-center gap-2 text-blue-600 font-bold text-sm">
                 <Sparkles size={16} />
                 <span>进阶并发 (Cyber Mode)</span>
               </div>
