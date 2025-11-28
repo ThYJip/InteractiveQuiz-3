@@ -9,9 +9,10 @@ import GameEngineScroll from './components/3.1.3/GameEngine';
 import GameEngineSlot from './components/3.2.1/GameEngine';
 import GameEngineScaffold from './components/3.2.2/GameEngine';
 import GameEngineInput from './components/3.3.1/GameEngine';
+import GameEngineButton from './components/3.3.2/GameEngine';
 import Lobby from './components/Lobby';
 
-type View = 'LOBBY' | '4.1.2' | '2.4.2' | '2.3.1' | '2.3.2' | '3.1.1' | '3.1.2' | '3.1.3' | '3.2.1' | '3.2.2' | '3.3.1';
+type View = 'LOBBY' | '4.1.2' | '2.4.2' | '2.3.1' | '2.3.2' | '3.1.1' | '3.1.2' | '3.1.3' | '3.2.1' | '3.2.2' | '3.3.1' | '3.3.2';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('LOBBY');
@@ -76,6 +77,12 @@ const App: React.FC = () => {
         return (
           <div className="w-full h-screen relative overflow-hidden bg-[#FDF2F8] text-slate-800 selection:bg-pink-300 selection:text-white">
             <GameEngineInput onBack={() => setCurrentView('LOBBY')} />
+          </div>
+        );
+      case '3.3.2':
+        return (
+          <div className="w-full h-screen relative overflow-hidden bg-[#FEF2F2] text-slate-800 selection:bg-red-300 selection:text-white">
+            <GameEngineButton onBack={() => setCurrentView('LOBBY')} />
           </div>
         );
       default:
