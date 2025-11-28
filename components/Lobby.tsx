@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick, Image as ImageIcon, Wind, Gamepad2, Recycle, Filter, Box, Database } from 'lucide-react';
+import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick, Image as ImageIcon, Wind, Gamepad2, Recycle, Filter, Box, Database, Send } from 'lucide-react';
 
 interface Props {
   onSelectLesson: (lessonId: string) => void;
@@ -23,6 +23,32 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl w-full">
           
+          {/* Card 4.3.3: Event Handling (Red/Relay) */}
+          <button 
+            onClick={() => onSelectLesson('4.3.3')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-red-100 hover:border-red-300 overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-red-100 rounded-full blur-2xl group-hover:bg-red-200 transition-colors opacity-60"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mb-6 text-red-600 group-hover:scale-110 transition-transform duration-500">
+                <Send size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-red-700 transition-colors">
+                4.3.3 事件回调处理
+              </h2>
+              <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+                像接力跑一样传递事件！使用 Lambda 解耦 UI 与 ViewModel，让你的组件更易复用和测试。
+              </p>
+              
+              <div className="flex items-center gap-2 text-red-600 font-bold text-sm">
+                <Sparkles size={16} />
+                <span>架构进阶 (Cozy Camp)</span>
+              </div>
+            </div>
+          </button>
+
           {/* Card 4.3.2: State Modeling (Violet/Vending Machine) */}
           <button 
             onClick={() => onSelectLesson('4.3.2')}
