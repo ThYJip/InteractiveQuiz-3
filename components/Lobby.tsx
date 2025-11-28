@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick } from 'lucide-react';
+import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick, Image as ImageIcon } from 'lucide-react';
 
 interface Props {
   onSelectLesson: (lessonId: string) => void;
@@ -302,6 +303,32 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
               </p>
               
               <div className="flex items-center gap-2 text-red-600 font-bold text-sm">
+                <Layers size={16} />
+                <span>交互组件 (Cozy Camp)</span>
+              </div>
+            </div>
+          </button>
+
+          {/* Card 12: Images & Icons (Cyan/Photo Theme) */}
+          <button 
+            onClick={() => onSelectLesson('3.3.3')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-cyan-100 hover:border-cyan-300 overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-cyan-100 rounded-full blur-2xl group-hover:bg-cyan-200 transition-colors opacity-60"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-cyan-100 rounded-2xl flex items-center justify-center mb-6 text-cyan-600 group-hover:scale-110 transition-transform duration-500">
+                <ImageIcon size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-cyan-700 transition-colors">
+                3.3.3 图片与图标
+              </h2>
+              <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+                照片压扁了？图标不变色？盲人看不见？掌握 `Image` 与 `Icon` 的正确用法！
+              </p>
+              
+              <div className="flex items-center gap-2 text-cyan-600 font-bold text-sm">
                 <Layers size={16} />
                 <span>交互组件 (Cozy Camp)</span>
               </div>
