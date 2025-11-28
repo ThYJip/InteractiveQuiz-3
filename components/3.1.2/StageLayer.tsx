@@ -108,12 +108,26 @@ const StageLayer: React.FC<Props> = ({ step, onInteractiveComplete }) => {
 
       case 'VICTORY':
          return (
-             <div className="text-center animate-bounce flex flex-col items-center p-8 bg-white/60 backdrop-blur-md rounded-[3rem] shadow-2xl border-4 border-white">
-                 <CheckSquare size={120} className="text-indigo-600 mb-6 drop-shadow-xl" />
-                 <h1 className="text-5xl font-black text-indigo-800 mb-4 tracking-tight">List Mastered!</h1>
-                 <p className="text-xl text-indigo-700 font-bold">
-                    你已经学会了如何<br/>优雅地管理复杂列表！
-                 </p>
+             <div className="w-full h-full flex flex-col items-center justify-center p-4">
+                 <div className="text-center animate-bounce flex flex-col items-center p-8 bg-white/60 backdrop-blur-md rounded-[3rem] shadow-2xl border-4 border-white mb-6">
+                     <CheckSquare size={120} className="text-indigo-600 mb-6 drop-shadow-xl" />
+                     <h1 className="text-5xl font-black text-indigo-800 mb-4 tracking-tight">List Mastered!</h1>
+                     <p className="text-xl text-indigo-700 font-bold">
+                        你已经学会了如何<br/>优雅地管理复杂列表！
+                     </p>
+                 </div>
+                 
+                 {/* Mini Review Cards for MVP Screen */}
+                 <div className="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-3 opacity-90 animate-slide-up">
+                    <div className="bg-white/80 p-3 rounded-xl border border-indigo-100 shadow flex items-center gap-3">
+                         <div className="bg-indigo-100 p-2 rounded-full"><Layers size={16} className="text-indigo-600"/></div>
+                         <span className="text-xs font-bold text-indigo-900">Sealed Interface 分发类型</span>
+                    </div>
+                    <div className="bg-white/80 p-3 rounded-xl border border-indigo-100 shadow flex items-center gap-3">
+                         <div className="bg-indigo-100 p-2 rounded-full"><Key size={16} className="text-indigo-600"/></div>
+                         <span className="text-xs font-bold text-indigo-900">Key 锁定状态，防止漂移</span>
+                    </div>
+                 </div>
              </div>
          )
 

@@ -350,9 +350,12 @@ const InteractiveListLab: React.FC<Props> = ({ config, onComplete }) => {
                             </div>
                         )}
                     </div>
-                    <button onClick={checkCodeWithAI} disabled={aiLoading || aiFeedback?.pass} className="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-blue-500">
-                        {aiLoading ? <Loader2 className="animate-spin" /> : <Sparkles size={18} />} 提交
-                    </button>
+                    {/* HIDE BUTTON ON SUCCESS */}
+                    {!aiFeedback?.pass && (
+                        <button onClick={checkCodeWithAI} disabled={aiLoading} className="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-blue-500">
+                            {aiLoading ? <Loader2 className="animate-spin" /> : <Sparkles size={18} />} 提交
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

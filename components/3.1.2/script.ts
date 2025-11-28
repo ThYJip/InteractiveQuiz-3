@@ -40,10 +40,29 @@ items(allItems) { item ->
       interactiveConfig: { mode: 'HETERO_VISUALIZER' }
     }
   },
+  {
+    id: 4,
+    speaker: "Rin",
+    text: "就像刚才分类那样，我们在代码里用 Sealed Interface 定义类型，然后用 when 语句分发。这样代码就清晰多了。",
+    viewType: "CODE_EXPLAIN",
+    viewContent: {
+      codeSnippet: `sealed interface CampItem {
+    data class Food(val cal: Int) : CampItem
+    data class Gear(val weight: Int) : CampItem
+}
+
+items(campItems) { item ->
+    when(item) {
+        is CampItem.Food -> FoodRow(item)
+        is CampItem.Gear -> GearRow(item)
+    }
+}`
+    }
+  },
 
   // --- ACT 2: THE KEY CRISIS ---
   {
-    id: 4,
+    id: 5,
     speaker: "Nadeshiko",
     text: "好！我分类整理好了！我还给每个杯子贴了“已清洗”的标签（状态）。但是……当我拿走第一个杯子时，标签好像贴错了？",
     viewType: "INTERACTIVE_LAB",
@@ -52,7 +71,7 @@ items(allItems) { item ->
     }
   },
   {
-    id: 5,
+    id: 6,
     speaker: "Rin",
     text: "这就是 Compose 的“位置记忆”问题。你没给杯子贴身份证 (Key)，Compose 只记得“第2个位置是已清洗”，当你拿走第1个，原本的第2个变成了第1个，状态就乱套了。",
     viewType: "IMAGE",
@@ -63,7 +82,7 @@ items(allItems) { item ->
 
   // --- ACT 3: THE KEY SOLUTION ---
   {
-    id: 6,
+    id: 7,
     speaker: "Sensei",
     text: "要解决这个问题，必须给每个列表项一个独一无二的 key。这样 Compose 就能认出“还是那个杯子”，而不是“那个位置”。",
     viewType: "INTERACTIVE_LAB",
@@ -74,7 +93,7 @@ items(allItems) { item ->
 
   // --- ACT 4: QUIZ ---
   {
-    id: 7,
+    id: 8,
     speaker: "Sensei",
     text: "来考考你。如果我不写 key，默认情况下 Compose 是用什么来作为 key 的？",
     viewType: "INTERACTIVE_LAB",
@@ -85,7 +104,7 @@ items(allItems) { item ->
 
   // --- ACT 5: TYPING ---
   {
-    id: 8,
+    id: 9,
     speaker: "Nadeshiko",
     text: "是用“位置”！我记住了！我要把加上 key 的代码抄写下来，贴在背包上警示自己！",
     viewType: "INTERACTIVE_LAB",
@@ -99,7 +118,7 @@ items(allItems) { item ->
 
   // --- ACT 6: SUMMARY ---
   {
-    id: 9,
+    id: 10,
     speaker: "Rin",
     text: "分类处理让列表整洁，Key 让列表状态稳定。这两点是构建复杂列表的基石。",
     viewType: "TECH_SUMMARY",
@@ -108,7 +127,7 @@ items(allItems) { item ->
 
   // --- ACT 7: AI CHALLENGE ---
   {
-    id: 10,
+    id: 11,
     speaker: "Rin",
     text: "最后，写一个支持多种消息类型（文本/图片）的聊天列表代码，并且必须加上 key。让我看看你能不能处理真实场景。",
     viewType: "INTERACTIVE_LAB",
@@ -122,7 +141,7 @@ items(allItems) { item ->
 
   // --- ACT 8: VICTORY ---
   {
-    id: 11,
+    id: 12,
     speaker: "Nadeshiko",
     text: "背包整理得井井有条，杯子也不会弄混了！这就叫“专业露营”！",
     viewType: "VICTORY",
