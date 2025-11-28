@@ -2,7 +2,7 @@
 import React from 'react';
 import { ScriptStep } from './types';
 import InteractiveConfigLab from './InteractiveConfigLab';
-import { Image as ImageIcon, CheckCircle, Shield, RotateCw } from 'lucide-react';
+import { Image as ImageIcon, CheckCircle, Shield, RotateCw, BookOpen, AlertTriangle, Package } from 'lucide-react';
 
 interface Props {
   step: ScriptStep;
@@ -40,7 +40,7 @@ const StageLayer: React.FC<Props> = ({ step, onInteractiveComplete }) => {
                         <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
                         <div className="w-3 h-3 rounded-full bg-green-400"></div>
                     </div>
-                    <span className="text-xs text-slate-400 ml-3 font-mono font-bold tracking-wider">RotationHandler.kt</span>
+                    <span className="text-xs text-slate-400 ml-3 font-mono font-bold tracking-wider">KtSnippet.kt</span>
                 </div>
             </div>
             <div className="overflow-auto p-6 custom-scrollbar bg-[#0f172a]">
@@ -62,31 +62,55 @@ const StageLayer: React.FC<Props> = ({ step, onInteractiveComplete }) => {
     
       case 'VICTORY':
          return (
-             <div className="text-center flex flex-col items-center p-8 bg-white/60 backdrop-blur-md rounded-[3rem] shadow-2xl border-4 border-white animate-in zoom-in duration-500 max-w-2xl w-full">
-                 <Shield size={100} className="text-green-600 mb-6 drop-shadow-xl" />
-                 <h1 className="text-4xl font-black text-green-800 mb-2 tracking-tight">Data Saved!</h1>
-                 <p className="text-lg text-green-700 font-bold mb-6">
-                    你的松果安全地度过了“世界毁灭”！
-                 </p>
-                 
-                 <div className="bg-white/80 p-6 rounded-2xl shadow-inner border border-green-100 w-full text-left">
-                    <h3 className="font-bold text-green-800 mb-3 border-b border-green-100 pb-2">
-                        ⛺ 露营笔记
-                    </h3>
-                    <ul className="space-y-3 text-slate-600 text-sm">
-                        <li className="flex gap-2">
-                            <CheckCircle size={16} className="text-green-500 mt-0.5 shrink-0" />
-                            <span><b>Config Change:</b> 旋转屏幕会销毁并重建 Activity。</span>
-                        </li>
-                        <li className="flex gap-2">
-                            <CheckCircle size={16} className="text-green-500 mt-0.5 shrink-0" />
-                            <span><b>remember:</b> 像敞口篮子，Activity 销毁时数据丢失。</span>
-                        </li>
-                        <li className="flex gap-2">
-                            <CheckCircle size={16} className="text-green-500 mt-0.5 shrink-0" />
-                            <span><b>rememberSaveable:</b> 像拉链背包，把数据存入 Bundle，重建时恢复。</span>
-                        </li>
-                    </ul>
+             <div className="w-full max-w-4xl h-full overflow-y-auto custom-scrollbar p-4 flex flex-col items-center">
+                 <div className="text-center flex flex-col items-center p-6 bg-white/80 backdrop-blur-md rounded-[2.5rem] shadow-2xl border-4 border-white animate-in zoom-in duration-500 w-full mb-24">
+                     <Shield size={80} className="text-green-600 mb-4 drop-shadow-xl" />
+                     <h1 className="text-3xl md:text-4xl font-black text-green-800 mb-2 tracking-tight">Mission Complete!</h1>
+                     <p className="text-lg text-green-700 font-bold mb-6">
+                        你已掌握【配置变更持久化】技能
+                     </p>
+                     
+                     {/* Technical Summary Cards */}
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-left">
+                         
+                         {/* Card 1: Core Concept */}
+                         <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                             <div className="flex items-center gap-2 mb-2 text-blue-800 font-bold">
+                                 <BookOpen size={20} />
+                                 <h3>核心原理</h3>
+                             </div>
+                             <p className="text-sm text-slate-600 leading-relaxed">
+                                 <code>rememberSaveable</code> 利用 <b>onSaveInstanceState</b> 机制。当 Activity 销毁（旋转/系统回收）时，它将数据序列化存入 <b>Bundle</b>，重建时自动恢复。
+                             </p>
+                         </div>
+
+                         {/* Card 2: Limitations */}
+                         <div className="bg-amber-50 p-4 rounded-2xl border border-amber-100">
+                             <div className="flex items-center gap-2 mb-2 text-amber-800 font-bold">
+                                 <AlertTriangle size={20} />
+                                 <h3>存储限制</h3>
+                             </div>
+                             <p className="text-sm text-slate-600 leading-relaxed">
+                                 Bundle 容量有限（通常 &lt; 1MB）。只能存储基本类型或 <b>Parcelable</b> 对象。大对象或网络句柄（Socket）不能存。
+                             </p>
+                         </div>
+
+                         {/* Card 3: Syntax */}
+                         <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 col-span-1 md:col-span-2">
+                             <div className="flex items-center gap-2 mb-2 text-slate-800 font-bold">
+                                 <Package size={20} />
+                                 <h3>最佳实践</h3>
+                             </div>
+                             <code className="block bg-slate-800 text-blue-200 p-3 rounded-xl text-xs font-mono mb-2">
+                                 @Parcelize<br/>
+                                 data class User(val name: String) : Parcelable<br/><br/>
+                                 val user by rememberSaveable &#123; mutableStateOf(User("Rin")) &#125;
+                             </code>
+                             <p className="text-xs text-slate-500">
+                                 对于自定义对象，务必添加 <code>@Parcelize</code> 注解并实现 Parcelable 接口。
+                             </p>
+                         </div>
+                     </div>
                  </div>
              </div>
          )

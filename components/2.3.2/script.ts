@@ -32,61 +32,73 @@ export const script: ScriptStep[] = [
   {
     id: 4,
     speaker: "Rin",
-    text: "这就是 Android 世界的自然法则。当你旋转屏幕时，为了适应新布局，系统会把当前的“世界”（Activity）销毁并重建。",
+    text: "这就是 Android 的法则。旋转屏幕会导致 Activity 销毁并重建。普通的 remember 就像敞口篮子，东西全撒了。",
     viewType: "CODE_EXPLAIN",
     viewContent: {
       codeSnippet: `// 📸 拍照危机 (Configuration Change)
+// 1. 旋转屏幕 -> Activity 销毁
+onDestroy() // 内存被清空
 
-// 1. 竖屏 -> 横屏
-// 系统认为布局可能变了，需要重新加载资源
-Activity.onDestroy() // 旧世界毁灭，remember 的内存被清空
-
-// 2. 重建世界
-Activity.onCreate()  // 新世界诞生
-// 3. 代码重新运行
-var count by remember { ... } // 重新初始化为 0`
+// 2. 重建 -> onCreate()
+// 3. 代码重新运行 -> 重新初始化为 0
+var count by remember { mutableStateOf(0) }`
     }
   },
   {
     id: 5,
     speaker: "Sensei",
-    text: "普通的 `remember` 就像一个敞口的篮子。手机一倒（Activity 销毁），东西就掉光了。你需要一个“带拉链的背包”—— `rememberSaveable`。",
+    text: "这时候需要 `rememberSaveable`。它像一个带拉链的背包，会自动把数据存进系统保险箱 (Bundle)。不过，考考你...",
     viewType: "IMAGE",
     viewContent: {
-      imagePrompt: "前辈拿出一个带有坚固拉链的登山背包，示意图显示它可以把数据锁在里面。"
+      imagePrompt: "前辈推了推眼镜，拿出黑板，准备进行露营地小测验。"
     }
   },
   {
     id: 6,
     speaker: "Sensei",
-    text: "它会把数据打包存进系统的 Bundle（保险箱）里。即使世界重建，它也能从保险箱里把数据取回来。",
-    viewType: "CODE_EXPLAIN",
+    text: "虽然背包很厉害，但系统保险箱 (Bundle) 容量有限且有类型限制。以下哪样东西 **不能** 直接放进 `rememberSaveable` 里？",
+    viewType: "INTERACTIVE_LAB",
     viewContent: {
-      codeSnippet: `// 🎒 使用带拉链的背包
-
-@Composable
-fun PineconeCounter() {
-    // rememberSaveable: 即使旋转屏幕，数据也不会丢！
-    // 它自动把数据存入 Bundle (onSaveInstanceState)
-    var count by rememberSaveable { mutableStateOf(0) }
-    
-    // ...
-}`
+      interactiveConfig: { mode: 'QUIZ' }
     }
   },
   {
     id: 7,
+    speaker: "Sensei",
+    text: "正确！Socket 连接、文件流等对象无法被序列化，不能存入 Bundle。只有基本类型或实现了 Parcelable 的对象才行。",
+    viewType: "CODE_EXPLAIN",
+    viewContent: {
+      codeSnippet: `// ✅ 支持的类型：
+// Int, String, Boolean, Array...
+// @Parcelize 数据类 (推荐)
+
+// ❌ 不支持的类型：
+// Socket, Thread, Context, InputStream
+// (这些一旦 Activity 销毁，它们也失效了，存也没用)`
+    }
+  },
+  {
+    id: 8,
     speaker: "Nadeshiko",
-    text: "噢噢！带拉链的背包！让我们再试一次！这次左边放敞口篮子，右边放拉链背包，看看旋转后会发生什么！",
+    text: "懂了！松果数量是整数 (Int)，完全没问题。那我现在就来改造代码！",
+    viewType: "INTERACTIVE_LAB",
+    viewContent: {
+      interactiveConfig: { mode: 'CODE_CHALLENGE' }
+    }
+  },
+  {
+    id: 9,
+    speaker: "Nadeshiko",
+    text: "改造完成！现在的计数器是“防风”的了。让我们再试一次旋转，见证奇迹的时刻！",
     viewType: "INTERACTIVE_LAB",
     viewContent: {
       interactiveConfig: { mode: 'BACKPACK_FIX' }
     }
   },
   {
-    id: 8,
-    speaker: "Nadeshiko",
-    text: "太棒了！背包里的松果一个都没少！以后重要的东西（比如用户输入的名字、滚动位置）我都要放在背包里！",
+    id: 10,
+    speaker: "Rin",
+    text: "哼，还赖。看来你已经完全掌握“配置变更持久化”了。这张照片可以发了。",
     viewType: "VICTORY",
     viewContent: {}
   }

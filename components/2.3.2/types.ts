@@ -4,7 +4,7 @@ export type Speaker = "Chi" | "Rin" | "Nadeshiko" | "Sensei";
 export type ViewType = "IMAGE" | "CODE_EXPLAIN" | "INTERACTIVE_LAB" | "VICTORY";
 
 export interface InteractiveState {
-    mode: 'PHOTO_CRISIS' | 'BACKPACK_FIX'; 
+    mode: 'PHOTO_CRISIS' | 'QUIZ' | 'CODE_CHALLENGE' | 'BACKPACK_FIX'; 
     targetAction?: 'ROTATE_AND_OBSERVE';
 }
 
