@@ -138,10 +138,23 @@ items(campItems) { item ->
       }
     }
   },
+  
+  // --- ACT 7.5: FINAL PROJECT (MULTI-STEP) ---
+  {
+    id: 12,
+    speaker: "Sensei",
+    text: "非常好。现在，通过最后的终极挑战：我们来从零构建一个完整的、类型安全的、高性能的聊天列表。一步步来！",
+    viewType: "INTERACTIVE_LAB",
+    viewContent: {
+      interactiveConfig: {
+          mode: 'FINAL_PROJECT'
+      }
+    }
+  },
 
   // --- ACT 8: VICTORY ---
   {
-    id: 12,
+    id: 13,
     speaker: "Nadeshiko",
     text: "背包整理得井井有条，杯子也不会弄混了！这就叫“专业露营”！",
     viewType: "VICTORY",

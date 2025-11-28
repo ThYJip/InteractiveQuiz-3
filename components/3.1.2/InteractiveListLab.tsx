@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { InteractiveState } from './types';
-import { Loader2, Trash2, CheckSquare, Square, Tags, AlertTriangle, CheckCircle2, Edit3, Terminal, Sparkles, Coffee, Box, LayoutList } from 'lucide-react';
+import { Loader2, Trash2, CheckSquare, Square, Tags, AlertTriangle, CheckCircle2, Edit3, Terminal, Sparkles, Coffee, Box, LayoutList, Code, Smartphone, Image as ImageIcon, MessageCircle } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
 interface Props {
@@ -23,23 +23,13 @@ const InteractiveListLab: React.FC<Props> = ({ config, onComplete }) => {
   const [sortedCount, setSortedCount] = useState(0);
 
   // === LAB 2 & 3: STATE DRIFT (The Cup Shuffle) ===
-  // Initial state: 3 items. Item 2 is checked.
-  // We simulate "Compose Internal State" separately from "Data List"
-  // If NO KEY: internalStates[0] maps to dataList[0].
-  // If KEY: internalStates[key] maps to dataList[key].
-  
   const [dataList, setDataList] = useState<CupItem[]>([
       { id: 1, label: 'Cup A', checked: false },
-      { id: 2, label: 'Cup B', checked: false }, // Initially unchecked in data, but we'll interact to check it
+      { id: 2, label: 'Cup B', checked: false }, 
       { id: 3, label: 'Cup C', checked: false }
   ]);
-  
-  // This array represents Compose's "Slot Table" - purely positional memory for LAB 2
   const [positionalState, setPositionalState] = useState<boolean[]>([false, false, false]);
-  
-  // This map represents Key-based memory for LAB 3
   const [keyedState, setKeyedState] = useState<Record<number, boolean>>({ 1: false, 2: false, 3: false });
-
   const [hasInteracted, setHasInteracted] = useState(false);
   const [bugTriggered, setBugTriggered] = useState(false);
   const [fixVerified, setFixVerified] = useState(false);
@@ -56,6 +46,28 @@ const InteractiveListLab: React.FC<Props> = ({ config, onComplete }) => {
   const [userCode, setUserCode] = useState("LazyColumn {\n  items(messages) { msg ->\n    MessageRow(msg)\n  }\n}");
   const [aiLoading, setAiLoading] = useState(false);
   const [aiFeedback, setAiFeedback] = useState<{pass: boolean, msg: string} | null>(null);
+
+  // === LAB 7: FINAL PROJECT (MULTI-STEP) ===
+  const [projectStep, setProjectStep] = useState(0); // 0: Model, 1: List, 2: UI, 3: Success
+  const [projectInputs, setProjectInputs] = useState(["", "", ""]);
+  
+  const projectStepsInfo = [
+      {
+          title: "Step 1: 定义数据模型",
+          desc: "使用 Sealed Interface 定义 Message 类型，包含 TextMessage (id, text) 和 ImageMessage (id, url)。",
+          placeholder: "sealed interface Message { ... }"
+      },
+      {
+          title: "Step 2: 列表容器与 Key",
+          desc: "使用 LazyColumn 和 items。最关键的是：必须提供 key 参数！",
+          placeholder: "LazyColumn { items(..., key = { ... }) { ... } }"
+      },
+      {
+          title: "Step 3: UI 分发逻辑",
+          desc: "在 items 内部，使用 when 语句根据消息类型分发到不同的 Composable。",
+          placeholder: "when(msg) { is TextMessage -> ... }"
+      }
+  ];
 
 
   // --- LOGIC: HETERO VISUALIZER ---
@@ -75,15 +87,10 @@ const InteractiveListLab: React.FC<Props> = ({ config, onComplete }) => {
   };
 
   const handleDeleteItemBug = (indexToDelete: number) => {
-      // 1. Update Data: Remove item at index
       setDataList(prev => prev.filter((_, i) => i !== indexToDelete));
-      // 2. Compose Behavior (NO KEY): It sees list length shrink by 1.
-      // It keeps the first N-1 state slots.
-      // So if we delete index 0, slot 0 and 1 remain. Slot 2 is dropped.
       setPositionalState(prev => prev.slice(0, prev.length - 1));
-      
       setBugTriggered(true);
-      setTimeout(onComplete, 4000); // Give time to observe the bug
+      setTimeout(onComplete, 4000); 
   };
 
 
@@ -95,7 +102,6 @@ const InteractiveListLab: React.FC<Props> = ({ config, onComplete }) => {
 
   const handleDeleteItemKey = (idToDelete: number) => {
       setDataList(prev => prev.filter(item => item.id !== idToDelete));
-      // Keyed state doesn't need manual slicing, it just persists for remaining keys
       setFixVerified(true);
       setTimeout(onComplete, 3000);
   };
@@ -122,7 +128,7 @@ const InteractiveListLab: React.FC<Props> = ({ config, onComplete }) => {
   };
 
 
-  // --- LOGIC: AI ---
+  // --- LOGIC: AI (Assignment) ---
   const checkCodeWithAI = async () => {
       setAiLoading(true);
       setAiFeedback(null);
@@ -150,8 +156,201 @@ const InteractiveListLab: React.FC<Props> = ({ config, onComplete }) => {
       }
   };
 
+  // --- LOGIC: FINAL PROJECT ---
+  const checkProjectStepWithAI = async () => {
+      setAiLoading(true);
+      setAiFeedback(null);
+      const currentInfo = projectStepsInfo[projectStep];
+      const code = projectInputs[projectStep];
+
+      try {
+          const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+          const response = await ai.models.generateContent({
+             model: 'gemini-2.5-flash',
+             contents: `
+                You are Rin Shima. 
+                Step: ${currentInfo.title}.
+                Task Description: ${currentInfo.desc}.
+                User Code: "${code}".
+                
+                Verify if the code correctly implements the requirement for this step.
+                Step 1 Requirement: Sealed interface with 2 data classes.
+                Step 2 Requirement: LazyColumn with items and KEY parameter.
+                Step 3 Requirement: When expression checking types.
+
+                Respond JSON: { "pass": boolean, "message": "string (Short feedback in Chinese)" }.
+             `,
+             config: { responseMimeType: "application/json" }
+          });
+          const result = JSON.parse(response.text || "{}");
+          setAiFeedback({ pass: result.pass, msg: result.message });
+          
+          if (result.pass) {
+              setTimeout(() => {
+                  if (projectStep < 2) {
+                      setProjectStep(prev => prev + 1);
+                      setAiFeedback(null);
+                  } else {
+                      setProjectStep(3); // Complete
+                      onComplete(); // Enable Next button in Dialog
+                  }
+              }, 2000);
+          }
+      } catch (error) {
+          console.error(error);
+          setAiFeedback({ pass: false, msg: "AI 繁忙，模拟通过！" });
+          setTimeout(() => {
+            if (projectStep < 2) {
+                setProjectStep(prev => prev + 1);
+                setAiFeedback(null);
+            } else {
+                setProjectStep(3);
+                onComplete();
+            }
+          }, 1500);
+      } finally {
+          setAiLoading(false);
+      }
+  };
+
 
   // === RENDER ===
+
+  if (mode === 'FINAL_PROJECT') {
+      if (projectStep === 3) {
+          // SUCCESS SPLIT VIEW
+          return (
+              <div className="w-full h-full flex items-stretch gap-4 p-2 animate-fade-in">
+                  {/* LEFT: FULL CODE */}
+                  <div className="flex-1 bg-[#1e293b] rounded-2xl border-4 border-indigo-500 overflow-hidden flex flex-col shadow-2xl">
+                      <div className="bg-[#0f172a] p-3 text-indigo-300 font-bold font-mono text-sm flex items-center gap-2">
+                          <Code size={16}/> FinalCode.kt
+                      </div>
+                      <div className="flex-1 p-4 overflow-auto custom-scrollbar">
+                          <pre className="font-mono text-xs text-blue-200 whitespace-pre-wrap leading-relaxed">
+{`// 1. Data Model
+sealed interface Message {
+    val id: String
+    data class Text(override val id: String, val text: String) : Message
+    data class Image(override val id: String, val url: String) : Message
+}
+
+// 2. List UI
+@Composable
+fun ChatList(messages: List<Message>) {
+    LazyColumn {
+        // 3. Key & Heterogeneous UI
+        items(messages, key = { it.id }) { msg ->
+            when(msg) {
+                is Message.Text -> TextRow(msg)
+                is Message.Image -> ImageRow(msg)
+            }
+        }
+    }
+}`}
+                          </pre>
+                      </div>
+                  </div>
+
+                  {/* RIGHT: PREVIEW */}
+                  <div className="w-[300px] bg-white rounded-[2.5rem] border-8 border-slate-800 shadow-2xl overflow-hidden flex flex-col relative">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-b-xl z-20"></div>
+                      <div className="bg-indigo-600 h-16 w-full shrink-0 flex items-end pb-3 justify-center text-white font-bold shadow-md z-10">
+                          Camping Chat
+                      </div>
+                      <div className="flex-1 bg-[#EEF2FF] p-4 overflow-y-auto space-y-3">
+                          {/* Simulated Chat Items */}
+                          <div className="flex gap-2">
+                              <div className="w-8 h-8 rounded-full bg-pink-200 flex items-center justify-center shrink-0">N</div>
+                              <div className="bg-white p-2 rounded-2xl rounded-tl-none shadow-sm text-xs text-slate-700 max-w-[80%]">
+                                  大家到了吗？
+                              </div>
+                          </div>
+                          <div className="flex gap-2 flex-row-reverse">
+                              <div className="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center shrink-0">R</div>
+                              <div className="bg-blue-600 text-white p-2 rounded-2xl rounded-tr-none shadow-sm text-xs max-w-[80%]">
+                                  刚到，正在搭帐篷。
+                              </div>
+                          </div>
+                          <div className="flex gap-2 flex-row-reverse">
+                               <div className="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center shrink-0">R</div>
+                               <div className="w-32 h-24 bg-slate-200 rounded-lg overflow-hidden border border-slate-300 relative">
+                                   <ImageIcon className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-slate-400" />
+                               </div>
+                          </div>
+                           <div className="flex gap-2">
+                              <div className="w-8 h-8 rounded-full bg-pink-200 flex items-center justify-center shrink-0">N</div>
+                              <div className="bg-white p-2 rounded-2xl rounded-tl-none shadow-sm text-xs text-slate-700 max-w-[80%]">
+                                  哇！我也马上到！
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          )
+      }
+
+      // STEP INPUT VIEW
+      const info = projectStepsInfo[projectStep];
+      return (
+          <div className="w-full h-full flex flex-col items-center justify-center p-2">
+              <div className="w-full max-w-3xl bg-[#1e293b] rounded-xl shadow-2xl overflow-hidden flex flex-col h-[500px] border-4 border-slate-700">
+                  <div className="bg-[#0f172a] p-3 flex items-center justify-between border-b border-slate-700">
+                      <div className="flex items-center gap-2 text-slate-300 font-mono text-sm font-bold">
+                          <Terminal size={18} /> Final Project: Step {projectStep + 1}/3
+                      </div>
+                      <div className="flex gap-1">
+                          {[0, 1, 2].map(i => (
+                              <div key={i} className={`w-20 h-2 rounded-full transition-colors ${i <= projectStep ? 'bg-green-500' : 'bg-slate-700'}`}></div>
+                          ))}
+                      </div>
+                  </div>
+
+                  <div className="bg-slate-800/50 p-6 border-b border-slate-700">
+                      <h3 className="text-white font-bold text-lg mb-2">{info.title}</h3>
+                      <p className="text-blue-200 text-sm font-mono leading-relaxed">
+                          <span className="text-green-400">TODO:</span> {info.desc}
+                      </p>
+                  </div>
+
+                  <textarea 
+                      value={projectInputs[projectStep]}
+                      onChange={(e) => {
+                          const val = e.target.value;
+                          setProjectInputs(prev => {
+                              const next = [...prev];
+                              next[projectStep] = val;
+                              return next;
+                          });
+                      }}
+                      placeholder={info.placeholder}
+                      className="flex-1 bg-[#1e293b] text-slate-100 font-mono text-sm p-4 outline-none resize-none placeholder:text-slate-600"
+                      spellCheck={false}
+                  />
+
+                  <div className="bg-[#0f172a] p-4 flex items-center justify-between border-t border-slate-700">
+                       <div className="flex-1 mr-4">
+                          {aiFeedback && (
+                              <div className={`text-xs font-mono p-2 rounded border ${aiFeedback.pass ? 'bg-green-900/30 border-green-700 text-green-300' : 'bg-red-900/30 border-red-700 text-red-300'}`}>
+                                  {aiFeedback.msg}
+                              </div>
+                          )}
+                      </div>
+                      <button 
+                        onClick={checkProjectStepWithAI} 
+                        disabled={aiLoading} 
+                        className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-indigo-500 disabled:opacity-50"
+                      >
+                          {aiLoading ? <Loader2 className="animate-spin" /> : <Sparkles size={18} />} 
+                          {projectStep === 2 ? "完成构建" : "下一步"}
+                      </button>
+                  </div>
+              </div>
+          </div>
+      )
+  }
+
+  // --- EXISTING LAB MODES ---
 
   if (mode === 'HETERO_VISUALIZER') {
       return (

@@ -4,7 +4,7 @@ export type Speaker = "Chi" | "Rin" | "Nadeshiko" | "Sensei";
 export type ViewType = "IMAGE" | "CODE_EXPLAIN" | "INTERACTIVE_LAB" | "TECH_SUMMARY" | "VICTORY";
 
 export interface InteractiveState {
-    mode: 'HETERO_VISUALIZER' | 'STATE_DRIFT_BUG' | 'KEY_FIX' | 'QUIZ' | 'GUIDED_TYPING' | 'AI_ASSIGNMENT';
+    mode: 'HETERO_VISUALIZER' | 'STATE_DRIFT_BUG' | 'KEY_FIX' | 'QUIZ' | 'GUIDED_TYPING' | 'AI_ASSIGNMENT' | 'FINAL_PROJECT';
     targetCode?: string; // For typing
     assignmentPrompt?: string; // For AI
 }
