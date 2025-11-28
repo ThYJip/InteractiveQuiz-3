@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick, Image as ImageIcon, Wind, Gamepad2, Recycle } from 'lucide-react';
+import { Layers, Share2, Sparkles, Zap, BrainCircuit, Smartphone, Backpack, List, Tags, Radio, LayoutTemplate, Hammer, PenTool, MousePointerClick, Image as ImageIcon, Wind, Gamepad2, Recycle, Filter } from 'lucide-react';
 
 interface Props {
   onSelectLesson: (lessonId: string) => void;
@@ -23,7 +23,7 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl w-full">
           
-          {/* Card 0: Side Effects (Purple/Storm Theme) */}
+          {/* Card 4.1.1: Side Effects (Purple/Storm Theme) */}
           <button 
             onClick={() => onSelectLesson('4.1.1')}
             className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-indigo-100 hover:border-indigo-300 overflow-hidden"
@@ -123,6 +123,32 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
               <div className="flex items-center gap-2 text-blue-600 font-bold text-sm">
                 <Sparkles size={16} />
                 <span>进阶并发 (Cyber Mode)</span>
+              </div>
+            </div>
+          </button>
+
+          {/* Card 4.2.2: Derived State (Green/Binoculars) */}
+          <button 
+            onClick={() => onSelectLesson('4.2.2')}
+            className="group relative bg-white rounded-[2.5rem] p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-[3px] border-green-100 hover:border-green-300 overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-green-100 rounded-full blur-2xl group-hover:bg-green-200 transition-colors opacity-60"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6 text-green-600 group-hover:scale-110 transition-transform duration-500">
+                <Filter size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-green-700 transition-colors">
+                4.2.2 衍生状态优化
+              </h2>
+              <p className="text-slate-500 font-medium mb-6 leading-relaxed">
+                爬山太累了？使用 derivedStateOf 像望远镜一样过滤高频信号，拒绝无效重组！
+              </p>
+              
+              <div className="flex items-center gap-2 text-green-600 font-bold text-sm">
+                <Sparkles size={16} />
+                <span>性能优化 (Cozy Camp)</span>
               </div>
             </div>
           </button>
