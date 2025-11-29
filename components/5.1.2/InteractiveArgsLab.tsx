@@ -81,7 +81,7 @@ const InteractiveArgsLab: React.FC<Props> = ({ config, onComplete }) => {
   // --- LOGIC: OPTIONAL NOTES ---
   const handleSearch = () => {
       const q = queryInput.trim();
-      const result = q === "" ? "Displaying ALL items (Default)" : `Displaying items for: ${q}`;
+      const result = q === "" ? "显示所有物品 (默认)" : `显示搜索结果: ${q}`;
       setSearchResult(result);
 
       if (q === "") setHasTriedEmpty(true);
@@ -181,18 +181,18 @@ const InteractiveArgsLab: React.FC<Props> = ({ config, onComplete }) => {
                     disabled={deliveryStatus !== 'IDLE'}
                     className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${mode === 'ADDRESS_FAIL' ? 'bg-red-500 hover:bg-red-600' : 'bg-sky-500 hover:bg-sky-600'} text-white shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
-                      {deliveryStatus === 'SHIPPING' ? <><Loader2 className="animate-spin" /> Sending...</> : 'Send Package'}
+                      {deliveryStatus === 'SHIPPING' ? <><Loader2 className="animate-spin" /> 发送中...</> : '发送包裹'}
                   </button>
               </div>
               
               {mode === 'ADDRESS_FAIL' && (
                   <p className="text-slate-500 text-xs text-center">
-                      Tip: Keep input empty to see the crash.
+                      提示：保持输入为空以触发崩溃。
                   </p>
               )}
               {mode === 'ADDRESS_SUCCESS' && (
                   <p className={`text-xs text-center transition-opacity duration-500 ${failCount > 0 ? 'text-red-500 opacity-100 animate-pulse' : 'text-slate-400 opacity-0'}`}>
-                      {failCount > 0 ? "已为你自动填写 ID，请再次点击发送！" : "Please enter an ID"}
+                      {failCount > 0 ? "已为你自动填写 ID，请再次点击发送！" : "请输入 ID"}
                   </p>
               )}
           </div>
@@ -205,7 +205,7 @@ const InteractiveArgsLab: React.FC<Props> = ({ config, onComplete }) => {
               <div className="bg-sky-50 p-6 rounded-3xl border-4 border-sky-200 w-full max-w-md flex flex-col gap-4 shadow-xl">
                   <div className="flex items-center gap-2 text-sky-800 font-bold">
                       <Search /> 
-                      <span>Camping Search</span>
+                      <span>露营搜索</span>
                   </div>
                   
                   <div className="flex gap-2">
@@ -213,7 +213,7 @@ const InteractiveArgsLab: React.FC<Props> = ({ config, onComplete }) => {
                         type="text" 
                         value={queryInput}
                         onChange={(e) => setQueryInput(e.target.value)}
-                        placeholder="Search..."
+                        placeholder="搜索..."
                         className="flex-1 p-3 rounded-xl border-2 border-sky-200 focus:border-sky-500 outline-none"
                       />
                       <button 
@@ -228,7 +228,7 @@ const InteractiveArgsLab: React.FC<Props> = ({ config, onComplete }) => {
                       {searchResult ? (
                           <span className="text-slate-700 font-bold animate-fade-in">{searchResult}</span>
                       ) : (
-                          <span className="text-slate-400 text-sm">Results will appear here...</span>
+                          <span className="text-slate-400 text-sm">结果将显示在这里...</span>
                       )}
                   </div>
               </div>
@@ -236,11 +236,11 @@ const InteractiveArgsLab: React.FC<Props> = ({ config, onComplete }) => {
               <div className="flex gap-4">
                   <div className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 ${hasTriedEmpty ? 'bg-green-100 border-green-500 text-green-700' : 'bg-slate-100 border-slate-300 text-slate-400'}`}>
                       {hasTriedEmpty ? <CheckCircle2 size={16} /> : <div className="w-4 h-4 rounded-full border-2 border-current" />}
-                      <span className="text-xs font-bold">Try Default (Empty)</span>
+                      <span className="text-xs font-bold">试用默认值 (空)</span>
                   </div>
                   <div className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 ${hasTriedValue ? 'bg-green-100 border-green-500 text-green-700' : 'bg-slate-100 border-slate-300 text-slate-400'}`}>
                       {hasTriedValue ? <CheckCircle2 size={16} /> : <div className="w-4 h-4 rounded-full border-2 border-current" />}
-                      <span className="text-xs font-bold">Try Value</span>
+                      <span className="text-xs font-bold">试用具体值</span>
                   </div>
               </div>
           </div>
@@ -302,7 +302,7 @@ const InteractiveArgsLab: React.FC<Props> = ({ config, onComplete }) => {
             <div className="w-full max-w-3xl bg-[#1e293b] rounded-xl shadow-2xl overflow-hidden flex flex-col h-[500px] border-4 border-sky-700">
                 <div className="bg-[#0f172a] p-3 flex items-center justify-between border-b border-slate-700">
                     <div className="flex items-center gap-2 text-sky-400 font-mono text-sm font-bold">
-                        <Terminal size={18} /> Rin's Proving Ground
+                        <Terminal size={18} /> 凛的试炼场
                     </div>
                 </div>
                 <div className="bg-slate-800/50 p-4 border-b border-slate-700">

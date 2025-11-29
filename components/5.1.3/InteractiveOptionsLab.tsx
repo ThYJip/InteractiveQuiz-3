@@ -165,25 +165,25 @@ const InteractiveOptionsLab: React.FC<Props> = ({ config, onComplete }) => {
       return (
           <div className="w-full h-full flex flex-col items-center justify-center p-4 gap-8">
               <div className="flex gap-4 items-center bg-white/80 p-2 rounded-lg border border-yellow-200">
-                  <span className="font-bold text-slate-700 text-sm">Mode:</span>
+                  <span className="font-bold text-slate-700 text-sm">模式:</span>
                   <button 
                     onClick={() => { setCleanMode(false); setLoginStack(['Login']); setCurrentScreen('Login'); }}
                     className={`px-3 py-1 rounded text-xs font-bold transition-all ${!cleanMode ? 'bg-red-500 text-white' : 'bg-slate-200'}`}
                   >
-                      Default (Trap)
+                      默认 (陷阱)
                   </button>
                   <button 
                     onClick={() => { setCleanMode(true); setLoginStack(['Login']); setCurrentScreen('Login'); }}
                     className={`px-3 py-1 rounded text-xs font-bold transition-all ${cleanMode ? 'bg-green-500 text-white' : 'bg-slate-200'}`}
                   >
-                      Clean (popUpTo)
+                      清理 (popUpTo)
                   </button>
               </div>
 
               <div className="flex w-full max-w-xl gap-4 h-64">
                   {/* Visual Stack */}
                   <div className="w-1/3 bg-slate-800 rounded-xl p-4 flex flex-col-reverse gap-2 overflow-y-auto border-2 border-yellow-900/30">
-                      <div className="text-xs text-slate-500 font-bold uppercase text-center mb-2 sticky bottom-0">Back Stack</div>
+                      <div className="text-xs text-slate-500 font-bold uppercase text-center mb-2 sticky bottom-0">回退栈</div>
                       {loginStack.map((route, i) => (
                           <div key={i} className="bg-white p-2 rounded text-slate-800 text-sm font-mono shadow animate-slide-up flex items-center gap-2">
                               <span className="bg-yellow-100 text-yellow-600 text-[10px] px-1 rounded">{i}</span>
@@ -195,21 +195,21 @@ const InteractiveOptionsLab: React.FC<Props> = ({ config, onComplete }) => {
                   {/* Screen Simulation */}
                   <div className="flex-1 bg-white rounded-2xl border-4 border-slate-300 shadow-xl relative flex flex-col items-center justify-center p-4 overflow-hidden">
                       {currentScreen === 'EXIT' ? (
-                          <div className="text-2xl font-black text-slate-400">APP CLOSED</div>
+                          <div className="text-2xl font-black text-slate-400">应用已关闭</div>
                       ) : (
                           <>
-                              <div className="absolute top-2 left-2 text-xs font-bold text-slate-400">{currentScreen} Screen</div>
+                              <div className="absolute top-2 left-2 text-xs font-bold text-slate-400">{currentScreen} 页面</div>
                               
                               {currentScreen === 'Login' && (
                                   <button onClick={handleLogin} className="bg-blue-500 text-white px-6 py-2 rounded-lg font-bold shadow-lg hover:bg-blue-600">
-                                      Login
+                                      登录
                                   </button>
                               )}
                               
                               {currentScreen === 'Home' && (
                                   <div className="text-center">
                                       <Home size={48} className="text-yellow-600 mx-auto mb-2" />
-                                      <p className="text-sm text-slate-600">Welcome Home!</p>
+                                      <p className="text-sm text-slate-600">欢迎回家！</p>
                                   </div>
                               )}
                           </>
@@ -219,7 +219,7 @@ const InteractiveOptionsLab: React.FC<Props> = ({ config, onComplete }) => {
 
               {currentScreen !== 'EXIT' && (
                   <button onClick={handleBack} className="bg-slate-200 hover:bg-slate-300 text-slate-700 px-8 py-3 rounded-full font-bold flex items-center gap-2 shadow-md active:scale-95 transition-all">
-                      <Undo2 size={18} /> Press Back Button
+                      <Undo2 size={18} /> 按下返回键
                   </button>
               )}
           </div>
@@ -230,23 +230,23 @@ const InteractiveOptionsLab: React.FC<Props> = ({ config, onComplete }) => {
       return (
           <div className="w-full h-full flex flex-col items-center justify-center p-4 gap-8">
               <div className="flex gap-4 items-center bg-white/80 p-2 rounded-lg border border-yellow-200">
-                  <span className="font-bold text-slate-700 text-sm">Config:</span>
+                  <span className="font-bold text-slate-700 text-sm">配置:</span>
                   <button 
                     onClick={() => { setSingleTopMode(false); setCloneStack(['Home']); }}
                     className={`px-3 py-1 rounded text-xs font-bold transition-all ${!singleTopMode ? 'bg-red-500 text-white' : 'bg-slate-200'}`}
                   >
-                      Standard (Clones)
+                      标准 (分身)
                   </button>
                   <button 
                     onClick={() => { setSingleTopMode(true); setCloneStack(['Home']); }}
                     className={`px-3 py-1 rounded text-xs font-bold transition-all ${singleTopMode ? 'bg-green-500 text-white' : 'bg-slate-200'}`}
                   >
-                      SingleTop
+                      栈顶复用 (SingleTop)
                   </button>
               </div>
 
               <div className="w-full max-w-sm bg-slate-800 rounded-xl p-4 flex flex-col-reverse gap-2 h-64 overflow-y-auto border-4 border-slate-700 shadow-2xl relative">
-                  <div className="text-xs text-slate-500 font-bold uppercase text-center mb-2 sticky bottom-0 bg-slate-800 py-1 z-10">Back Stack (Size: {cloneStack.length})</div>
+                  <div className="text-xs text-slate-500 font-bold uppercase text-center mb-2 sticky bottom-0 bg-slate-800 py-1 z-10">回退栈 (大小: {cloneStack.length})</div>
                   {cloneStack.map((route, i) => (
                       <div key={i} className="bg-white p-2 rounded text-slate-800 text-sm font-mono shadow animate-pop-in flex items-center gap-2 shrink-0">
                           <Layers size={14} className="text-slate-400" />
@@ -263,7 +263,7 @@ const InteractiveOptionsLab: React.FC<Props> = ({ config, onComplete }) => {
               </button>
               
               {!singleTopMode && cloneStack.length > 5 && (
-                  <p className="text-red-500 font-bold animate-bounce">Too many clones! 😱</p>
+                  <p className="text-red-500 font-bold animate-bounce">分身太多啦！😱</p>
               )}
           </div>
       )
@@ -273,18 +273,18 @@ const InteractiveOptionsLab: React.FC<Props> = ({ config, onComplete }) => {
       return (
           <div className="w-full h-full flex flex-col items-center justify-center p-4 gap-6">
               <div className="flex gap-4 items-center bg-white/80 p-2 rounded-lg border border-yellow-200">
-                  <span className="font-bold text-slate-700 text-sm">State:</span>
+                  <span className="font-bold text-slate-700 text-sm">状态:</span>
                   <button 
                     onClick={() => { setSaveStateMode(false); setSavedPos(0); setScrollPos(0); if(listRef.current) listRef.current.scrollTop = 0; }}
                     className={`px-3 py-1 rounded text-xs font-bold transition-all ${!saveStateMode ? 'bg-red-500 text-white' : 'bg-slate-200'}`}
                   >
-                      Amnesia (Reset)
+                      失忆 (重置)
                   </button>
                   <button 
                     onClick={() => { setSaveStateMode(true); }}
                     className={`px-3 py-1 rounded text-xs font-bold transition-all ${saveStateMode ? 'bg-green-500 text-white' : 'bg-slate-200'}`}
                   >
-                      Remember (SaveState)
+                      记忆 (保存状态)
                   </button>
               </div>
 
@@ -297,7 +297,7 @@ const InteractiveOptionsLab: React.FC<Props> = ({ config, onComplete }) => {
                             onScroll={handleScroll}
                             className="w-full h-full overflow-y-auto bg-yellow-50 p-4 scroll-smooth"
                           >
-                              <h3 className="font-bold text-yellow-800 mb-4">Recipe List</h3>
+                              <h3 className="font-bold text-yellow-800 mb-4">食谱列表</h3>
                               {[...Array(20)].map((_, i) => (
                                   <div key={i} className="bg-white p-4 rounded-xl shadow-sm mb-3 flex items-center gap-3">
                                       <div className="w-10 h-10 bg-yellow-200 rounded-full flex items-center justify-center font-bold text-yellow-700">{i+1}</div>
@@ -308,7 +308,7 @@ const InteractiveOptionsLab: React.FC<Props> = ({ config, onComplete }) => {
                       ) : (
                           <div className="w-full h-full bg-slate-100 flex items-center justify-center flex-col gap-4 text-slate-400">
                               <Settings size={48} />
-                              <span className="font-bold">Settings Screen</span>
+                              <span className="font-bold">设置页面</span>
                           </div>
                       )}
                   </div>
@@ -333,7 +333,7 @@ const InteractiveOptionsLab: React.FC<Props> = ({ config, onComplete }) => {
               </div>
               
               <div className="text-center text-xs text-slate-500 font-mono bg-white px-4 py-2 rounded shadow">
-                  Scroll Pos: {Math.floor(scrollPos)} | Saved: {Math.floor(savedPos)}
+                  滚动位置: {Math.floor(scrollPos)} | 已保存: {Math.floor(savedPos)}
               </div>
           </div>
       )
@@ -394,7 +394,7 @@ const InteractiveOptionsLab: React.FC<Props> = ({ config, onComplete }) => {
             <div className="w-full max-w-3xl bg-[#1e293b] rounded-xl shadow-2xl overflow-hidden flex flex-col h-[500px] border-4 border-yellow-700">
                 <div className="bg-[#0f172a] p-3 flex items-center justify-between border-b border-slate-800">
                     <div className="flex items-center gap-2 text-yellow-400 font-mono text-sm font-bold">
-                        <Terminal size={18} /> Rin's Proving Ground
+                        <Terminal size={18} /> 凛的试炼场
                     </div>
                 </div>
                 <div className="bg-slate-800/50 p-4 border-b border-slate-700">

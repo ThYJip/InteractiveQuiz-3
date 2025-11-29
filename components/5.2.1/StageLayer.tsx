@@ -76,7 +76,7 @@ const StageLayer: React.FC<Props> = ({ step, onInteractiveComplete }) => {
                                  <h3>animate*AsState</h3>
                              </div>
                              <p className="text-sm text-slate-600 leading-relaxed">
-                                 "Fire-and-forget". Simply change the target value, and Compose handles the interpolation frame-by-frame.
+                                 "发射后不管" (Fire-and-forget)。只需改变目标值，Compose 会自动计算每一帧的插值。
                              </p>
                          </div>
 
@@ -87,7 +87,7 @@ const StageLayer: React.FC<Props> = ({ step, onInteractiveComplete }) => {
                                  <h3>AnimationSpec</h3>
                              </div>
                              <p className="text-sm text-slate-600 leading-relaxed">
-                                 <code>tween</code> for standard duration-based motion. <code>spring</code> for physics-based, bouncy, natural motion.
+                                 <code>tween</code> 用于基于时间的标准动画。<code>spring</code> 用于基于物理的、有弹性的自然动画。
                              </p>
                          </div>
 
@@ -95,10 +95,10 @@ const StageLayer: React.FC<Props> = ({ step, onInteractiveComplete }) => {
                          <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 col-span-1 md:col-span-2 shadow-sm hover:shadow-md transition-shadow">
                              <div className="flex items-center gap-2 mb-2 text-slate-800 font-bold">
                                  <Zap size={20} />
-                                 <h3>Interruption Handling</h3>
+                                 <h3>平滑中断</h3>
                              </div>
                              <p className="text-sm text-slate-600 leading-relaxed">
-                                 If the target changes while animating, `animate*AsState` smoothly redirects towards the new target, preserving momentum (especially with springs).
+                                 如果在动画过程中目标值发生变化，`animate*AsState` 会平滑地转向新目标，保持动量（特别是使用弹簧动画时）。
                              </p>
                          </div>
                      </div>
@@ -111,9 +111,9 @@ const StageLayer: React.FC<Props> = ({ step, onInteractiveComplete }) => {
              <div className="w-full h-full flex flex-col items-center justify-center p-4">
                  <div className="text-center animate-bounce flex flex-col items-center p-8 bg-white/60 backdrop-blur-md rounded-[3rem] shadow-2xl border-4 border-white mb-6">
                      <Move size={120} className="text-fuchsia-600 mb-6 drop-shadow-xl" />
-                     <h1 className="text-5xl font-black text-fuchsia-800 mb-4 tracking-tight">Magic Morph!</h1>
+                     <h1 className="text-5xl font-black text-fuchsia-800 mb-4 tracking-tight">魔法变形！</h1>
                      <p className="text-xl text-fuchsia-700 font-bold">
-                        You've mastered the art of<br/>Shape Shifting!
+                        你掌握了让物体<br/>自由变形的艺术！
                      </p>
                  </div>
              </div>

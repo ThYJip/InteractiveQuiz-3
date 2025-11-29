@@ -14,7 +14,7 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
         {/* Header */}
         <div className="text-center mb-12 mt-4 md:mt-0">
           <h1 className="text-4xl md:text-5xl font-black text-slate-800 mb-2 tracking-tight">
-            Yuru Camp: Code Chronicles
+            摇曳露营：代码传说
           </h1>
           <p className="text-slate-500 font-medium tracking-wide">
             选择你的冒险章节 / Choose Your Adventure
@@ -625,7 +625,7 @@ const Lobby: React.FC<Props> = ({ onSelectLesson }) => {
 
         {/* Footer */}
         <div className="mt-16 text-slate-400 text-sm font-medium pb-8">
-          © 2024 Yuru Camp Code Academy
+          © 2024 摇曳露营代码学院
         </div>
       </div>
     </div>

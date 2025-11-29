@@ -31,7 +31,7 @@ const InteractiveNavLab: React.FC<Props> = ({ config, onComplete }) => {
 
   // --- LOGIC: CHAOS ---
   const handleChaosClick = () => {
-      setChaosMessage("Nadeshiko shouts: 'Go to Forest!' ... But no one is listening.");
+      setChaosMessage("抚子大喊：‘去森林！’……但是没人理她。");
       setTimeout(() => {
           onComplete();
       }, 2500);
@@ -115,7 +115,7 @@ const InteractiveNavLab: React.FC<Props> = ({ config, onComplete }) => {
               <div className="relative w-64 h-64 bg-rose-50 rounded-full border-4 border-rose-200 flex items-center justify-center shadow-inner">
                   <div className="text-center">
                       <div className="text-4xl mb-2">🤷‍♀️</div>
-                      <div className="text-rose-800 font-bold">Stage: Empty</div>
+                      <div className="text-rose-800 font-bold">舞台：空</div>
                   </div>
                   
                   {chaosMessage && (
@@ -142,7 +142,7 @@ const InteractiveNavLab: React.FC<Props> = ({ config, onComplete }) => {
               <div className="flex w-full max-w-3xl gap-4 h-80">
                   {/* LEFT: BACK STACK */}
                   <div className="w-1/3 bg-slate-800 rounded-xl p-4 flex flex-col-reverse gap-2 overflow-y-auto border-2 border-rose-900/30 shadow-inner">
-                      <div className="text-xs text-slate-500 font-bold uppercase text-center mb-2 sticky bottom-0">Back Stack</div>
+                      <div className="text-xs text-slate-500 font-bold uppercase text-center mb-2 sticky bottom-0">回退栈</div>
                       {backStack.map((route, i) => (
                           <div key={i} className="bg-white p-2 rounded text-slate-800 text-sm font-mono shadow animate-slide-up flex items-center gap-2">
                               <span className="bg-rose-100 text-rose-600 text-[10px] px-1 rounded">{i}</span>
@@ -153,7 +153,7 @@ const InteractiveNavLab: React.FC<Props> = ({ config, onComplete }) => {
 
                   {/* CENTER: STAGE */}
                   <div className="flex-1 bg-rose-50 rounded-2xl border-8 border-rose-900 shadow-2xl relative overflow-hidden flex flex-col items-center justify-center p-4">
-                      <div className="absolute top-0 w-full bg-rose-900 text-rose-100 text-[10px] text-center font-bold py-1">NAVHOST CONTAINER</div>
+                      <div className="absolute top-0 w-full bg-rose-900 text-rose-100 text-[10px] text-center font-bold py-1">NAVHOST 容器</div>
                       
                       <div className="text-6xl mb-4 animate-pop-in">
                           {currentRoute === 'home' && '⛺️'}
@@ -168,7 +168,7 @@ const InteractiveNavLab: React.FC<Props> = ({ config, onComplete }) => {
               {/* BOTTOM: CONTROLLER */}
               <div className="bg-slate-900 p-4 rounded-2xl shadow-xl border border-slate-700 w-full max-w-lg flex items-center justify-between gap-4">
                   <div className="flex items-center gap-2 text-rose-400 font-bold text-xs uppercase tracking-wider">
-                      <Mic2 size={16} /> Director Control
+                      <Mic2 size={16} /> 导演控制台
                   </div>
                   
                   <div className="flex gap-2">
@@ -245,7 +245,7 @@ const InteractiveNavLab: React.FC<Props> = ({ config, onComplete }) => {
             <div className="w-full max-w-3xl bg-[#1e293b] rounded-xl shadow-2xl overflow-hidden flex flex-col h-[500px] border-4 border-rose-900">
                 <div className="bg-[#0f172a] p-3 flex items-center justify-between border-b border-slate-800">
                     <div className="flex items-center gap-2 text-rose-400 font-mono text-sm font-bold">
-                        <Terminal size={18} /> Rin's Proving Ground
+                        <Terminal size={18} /> 凛的试炼场
                     </div>
                 </div>
                 <div className="bg-slate-800/50 p-4 border-b border-slate-800">

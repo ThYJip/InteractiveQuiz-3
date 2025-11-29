@@ -43,7 +43,7 @@ const GameEngine: React.FC<Props> = ({ onBack }) => {
           className="fixed top-6 left-6 z-50 flex items-center gap-2 px-5 py-2.5 bg-slate-900/90 hover:bg-cyan-900/50 border-2 border-cyan-800 hover:border-cyan-500 rounded-lg text-cyan-400 hover:text-cyan-200 transition-all shadow-lg group font-mono"
         >
           <Home size={18} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-sm font-bold tracking-wide">EXIT_DECK</span>
+          <span className="text-sm font-bold tracking-wide">退出驾驶舱</span>
         </button>
       )}
 

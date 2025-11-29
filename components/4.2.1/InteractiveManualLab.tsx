@@ -189,7 +189,7 @@ const InteractiveManualLab: React.FC<Props> = ({ config, onComplete }) => {
                   <div className="w-64 h-64 rounded-full bg-gradient-to-br from-blue-900 to-indigo-900 flex items-center justify-center border-4 border-blue-400 shadow-[0_0_50px_rgba(59,130,246,0.5)] z-0">
                       <div className="text-blue-200 font-mono text-xs flex flex-col items-center animate-pulse">
                           <Zap size={40} />
-                          <span>SUSPEND SPACETIME</span>
+                          <span>挂起时空</span>
                           <span className="bg-blue-800 px-2 py-1 rounded mt-2">showSnackbar()</span>
                       </div>
                   </div>
@@ -206,7 +206,7 @@ const InteractiveManualLab: React.FC<Props> = ({ config, onComplete }) => {
                   {showError && (
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center z-30">
                           <div className="bg-red-600 text-white font-black text-2xl px-6 py-4 rounded-xl rotate-12 shadow-2xl border-4 border-white animate-bounce">
-                              COMPILE ERROR!
+                              编译错误！
                           </div>
                       </div>
                   )}
@@ -227,7 +227,7 @@ const InteractiveManualLab: React.FC<Props> = ({ config, onComplete }) => {
                     className={`px-4 py-2 rounded-lg font-bold shadow transition-all ${screenOn ? 'bg-green-500 text-white' : 'bg-slate-700 text-slate-400'}`}
                   >
                       <Power size={18} className="inline mr-2"/>
-                      {screenOn ? "Screen: ON" : "Screen: OFF"}
+                      {screenOn ? "屏幕: 开" : "屏幕: 关"}
                   </button>
                   {screenOn && (
                       <button 
@@ -235,7 +235,7 @@ const InteractiveManualLab: React.FC<Props> = ({ config, onComplete }) => {
                         className="px-4 py-2 rounded-lg font-bold shadow bg-cyan-600 hover:bg-cyan-500 text-white active:scale-95 transition-all"
                       >
                           <Play size={18} className="inline mr-2"/>
-                          Launch Task
+                          启动任务
                       </button>
                   )}
               </div>
@@ -244,11 +244,11 @@ const InteractiveManualLab: React.FC<Props> = ({ config, onComplete }) => {
               <div className={`w-full max-w-lg h-64 border-4 rounded-2xl relative overflow-hidden transition-colors duration-500 ${screenOn ? 'bg-slate-900 border-cyan-500/50' : 'bg-black border-slate-800'}`}>
                   {screenOn ? (
                       <div className="absolute inset-0 flex items-center justify-center text-cyan-900/30 font-black text-6xl select-none">
-                          ACTIVE
+                          活跃
                       </div>
                   ) : (
                       <div className="absolute inset-0 flex items-center justify-center text-slate-800 font-black text-6xl select-none">
-                          DESTROYED
+                          已销毁
                       </div>
                   )}
 
@@ -268,16 +268,16 @@ const InteractiveManualLab: React.FC<Props> = ({ config, onComplete }) => {
                       >
                           {d.status === 'CRASHED' ? <AlertTriangle size={32} /> : <Gamepad2 size={32} />}
                           <span className="text-[10px] font-mono font-bold bg-black/50 px-1 rounded mt-1">
-                              {d.status === 'CRASHED' ? 'LEAK!' : d.status === 'SAFE' ? 'CANCELLED' : 'RUNNING'}
+                              {d.status === 'CRASHED' ? '泄漏！' : d.status === 'SAFE' ? '已取消' : '运行中'}
                           </span>
                       </div>
                   ))}
               </div>
 
               <div className="bg-slate-800 p-4 rounded-xl text-xs text-slate-300 w-full max-w-lg border border-slate-700">
-                  <div className="font-bold mb-2 text-cyan-400">STATUS MONITOR:</div>
-                  <div>Active Drones: {drones.filter(d => d.status !== 'SAFE').length}</div>
-                  <div className="text-red-400">Leaked Drones: {drones.filter(d => d.status === 'CRASHED').length}</div>
+                  <div className="font-bold mb-2 text-cyan-400">状态监控:</div>
+                  <div>活跃无人机: {drones.filter(d => d.status !== 'SAFE').length}</div>
+                  <div className="text-red-400">泄漏无人机: {drones.filter(d => d.status === 'CRASHED').length}</div>
               </div>
           </div>
       )

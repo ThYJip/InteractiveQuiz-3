@@ -36,13 +36,7 @@ const InteractiveAnimLab: React.FC<Props> = ({ config, onComplete }) => {
           } 
           else if (mode === 'BOUNCY_JELLY') {
               // Simple spring physics simulation
-              // This is a very rough approximation for visual effect
-              // Real spring would need velocity tracking
               setCurrentSize(prev => {
-                  const k = 0.1; // Stiffness
-                  const damping = 0.8; // Damping
-                  // We need velocity state for real spring, simulating with CSS keyframes instead for bounce
-                  // But let's try a simple elastic approach here or rely on CSS
                   return prev; 
               });
           }
@@ -89,9 +83,9 @@ const InteractiveAnimLab: React.FC<Props> = ({ config, onComplete }) => {
   const getQuizFeedback = () => {
       if (!quizChoice) return null;
       switch (quizChoice) {
-          case 'FAST': return { correct: false, text: "Incorrect. 'HighBouncy' affects the oscillation, not just speed." };
-          case 'BOUNCE': return { correct: true, text: "Correct! Low damping means it oscillates (bounces) back and forth around the target before settling." };
-          case 'SMOOTH': return { correct: false, text: "Incorrect. That describes a high damping ratio (NoBouncy)." };
+          case 'FAST': return { correct: false, text: "不准确。HighBouncy 确实可能快，但重点在于它的回弹特性。" };
+          case 'BOUNCE': return { correct: true, text: "正确！低阻尼意味着它会在目标值附近来回振荡（回弹），然后才停下来。" };
+          case 'SMOOTH': return { correct: false, text: "错误。那是高阻尼比 (NoBouncy) 的特性。" };
           default: return null;
       }
   };
@@ -108,7 +102,7 @@ const InteractiveAnimLab: React.FC<Props> = ({ config, onComplete }) => {
                 You are Rin Shima. Task: ${config.assignmentPrompt}.
                 User Code: "${userCode}".
                 Check for animateColorAsState usage.
-                Respond JSON: { "pass": boolean, "message": "string (Rin persona, English)" }.
+                Respond JSON: { "pass": boolean, "message": "string (Rin persona, Chinese)" }.
              `,
              config: { responseMimeType: "application/json" }
           });
@@ -116,7 +110,7 @@ const InteractiveAnimLab: React.FC<Props> = ({ config, onComplete }) => {
           setAiFeedback({ pass: result.pass, msg: result.message });
           if (result.pass) setTimeout(onComplete, 3000);
       } catch (error) {
-          setAiFeedback({ pass: false, msg: "AI unavailable, simulating pass." });
+          setAiFeedback({ pass: false, msg: "AI 不在线，模拟通过。" });
           setTimeout(onComplete, 2000);
       } finally {
           setAiLoading(false);
@@ -134,16 +128,16 @@ const InteractiveAnimLab: React.FC<Props> = ({ config, onComplete }) => {
               <div className="bg-white/90 p-8 rounded-3xl shadow-xl border-4 border-fuchsia-100 max-w-lg w-full">
                   <div className="flex items-center gap-3 mb-6">
                       <div className="bg-fuchsia-100 p-2 rounded-full"><HelpCircle className="text-fuchsia-600" /></div>
-                      <h3 className="text-xl font-bold text-fuchsia-900">Physics Quiz</h3>
+                      <h3 className="text-xl font-bold text-fuchsia-900">物理小测验</h3>
                   </div>
                   <p className="text-lg text-slate-700 font-medium mb-6">
-                      What happens visually if you use `Spring.DampingRatioHighBouncy`?
+                      如果使用 `Spring.DampingRatioHighBouncy`，视觉上会发生什么？
                   </p>
                   <div className="space-y-3">
                       {[
-                          { val: 'FAST', label: 'It moves instantly to the target' },
-                          { val: 'SMOOTH', label: 'It slows down gently without overshooting' },
-                          { val: 'BOUNCE', label: 'It overshoots and oscillates (bounces)' }
+                          { val: 'FAST', label: '瞬间到达目标位置' },
+                          { val: 'SMOOTH', label: '缓慢减速，没有回弹' },
+                          { val: 'BOUNCE', label: '冲过头并来回振荡 (回弹)' }
                       ].map((opt) => {
                           const isSelected = quizChoice === opt.val;
                           const isCorrect = opt.val === 'BOUNCE';
@@ -180,7 +174,7 @@ const InteractiveAnimLab: React.FC<Props> = ({ config, onComplete }) => {
               <div className="w-full max-w-3xl bg-[#1e293b] rounded-xl shadow-2xl overflow-hidden flex flex-col h-[500px] border-4 border-fuchsia-700">
                   <div className="bg-[#0f172a] p-3 flex items-center justify-between border-b border-slate-800">
                       <div className="flex items-center gap-2 text-fuchsia-400 font-mono text-sm font-bold">
-                          <Terminal size={18} /> Rin's Proving Ground
+                          <Terminal size={18} /> 凛的试炼场
                       </div>
                   </div>
                   <div className="bg-slate-800/50 p-4 border-b border-slate-700">
@@ -202,7 +196,7 @@ const InteractiveAnimLab: React.FC<Props> = ({ config, onComplete }) => {
                       </div>
                       {!aiFeedback?.pass && (
                           <button onClick={checkCodeWithAI} disabled={aiLoading} className="bg-fuchsia-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-fuchsia-500 disabled:opacity-50">
-                              {aiLoading ? <Loader2 className="animate-spin" /> : <Sparkles size={18} />} Submit
+                              {aiLoading ? <Loader2 className="animate-spin" /> : <Sparkles size={18} />} 提交
                           </button>
                       )}
                   </div>
@@ -217,7 +211,7 @@ const InteractiveAnimLab: React.FC<Props> = ({ config, onComplete }) => {
           
           <div className="bg-white/50 px-6 py-3 rounded-full font-bold text-fuchsia-900 border border-fuchsia-200 flex items-center gap-2">
               <Activity size={20} />
-              MODE: {mode.replace('_', ' ')}
+              模式: {mode.replace('_', ' ')}
           </div>
 
           <div className="relative w-96 h-96 bg-white rounded-3xl border-8 border-slate-200 shadow-2xl flex items-center justify-center overflow-hidden">
@@ -244,7 +238,7 @@ const InteractiveAnimLab: React.FC<Props> = ({ config, onComplete }) => {
             onClick={handleToggle}
             className="bg-fuchsia-600 hover:bg-fuchsia-500 text-white px-8 py-4 rounded-2xl font-bold shadow-xl active:scale-95 transition-all text-xl flex items-center gap-2"
           >
-              <Zap fill="currentColor" /> Toggle Size
+              <Zap fill="currentColor" /> 变大/变小
           </button>
 
           {/* Add CSS for spring animation simulation */}

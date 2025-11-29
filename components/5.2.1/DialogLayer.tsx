@@ -109,7 +109,7 @@ const DialogLayer: React.FC<Props> = ({ speaker, text, onNext, canProceed, isLas
                         onClick={onNext}
                         className="absolute bottom-6 right-8 text-fuchsia-500 animate-bounce flex items-center gap-1 hover:text-fuchsia-700 transition-colors"
                     >
-                    <span className="text-sm font-bold uppercase tracking-widest">Next</span>
+                    <span className="text-sm font-bold uppercase tracking-widest">下一步</span>
                     <ArrowRight size={20} />
                     </button>
                 )}
